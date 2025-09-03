@@ -25,6 +25,10 @@ export default function Proj0() {
                     height={600}
                     className="rounded mx-auto"
                 />
+                <p>The photo on the right (taken from a distance with zoom) looks noticeably better than the close-up on the left. This difference is due to perspective distortion, which depends on the distance between the camera and the subject—not just the lens itself.</p>
+                <p>In the left photo, the camera was very close and used a wide-angle lens (short focal length). This exaggerated features that were closer to the lens, like my nose, making my face appear distorted.</p>
+                <p>In contrast, the right photo was taken from farther away with a longer focal length. By stepping back and zooming in to keep my face the same size in the frame, the perspective was flattened and my facial features appear more natural and proportional.</p>
+                <p>Simply put: distance makes a huge difference.</p>
             </section>
 
             <section className="space-y-4">
@@ -37,6 +41,7 @@ export default function Proj0() {
                     className="rounded mx-auto"
                 />
                 <p>The first photo (taken with zoom from a distance) looks flattened or compressed, and the second photo (taken closer with no zoom) appears more natural or expansive.</p>
+                <p>This difference is caused by perspective compression. When shooting from far away with a long focal length, the relative distances between foreground and background elements appear smaller, flattening the scene. When shooting up close with a wide-angle lens, the perspective exaggerates those distances. This shows that the camera position determines how space is rendered in a photo.</p>
             </section>
 
             <section className="space-y-4">
