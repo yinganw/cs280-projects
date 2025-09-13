@@ -683,8 +683,7 @@ $$
                   </p>
                   <p>Best shift for G: {m.bestShiftG}</p>
                   <p>Best shift for B: {m.bestShiftB}</p>
-                  <p>Runtime using L2: {m.l2Runtime}</p>
-                  <p>Runtime using NCC: {m.nccRuntime}</p>
+                  <p>Runtime: {m.runtime}</p>
                 </div>
               </div>
             </div>
