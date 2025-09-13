@@ -9,6 +9,12 @@ export default function Home() {
       description: 'Selfies, perspective, and dolly zoom exercises',
       href: '/proj0',
     },
+    {
+      id: 'proj1',
+      title: 'Project 1: Images of the Russian Empire',
+      description: 'Colorizing the Prokudin-Gorskii photo collection',
+      href: '/proj1',
+    },
   ];
 
   return (
