@@ -3,15 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+// import "swiper/css";
+// import "swiper/css/pagination";
+// import "swiper/css/navigation";
 import "katex/dist/katex.min.css";
 
 export default function Proj1() {
@@ -475,13 +473,13 @@ $$
           images, also known as the{" "}
           <span className="font-semibold">Euclidean Distance</span> which is
           simply
-          <div className="flex justify-center items-center w-full">
-            <ReactMarkdown
-              children={`$$\\sqrt{\\sum{\\sum(image1(x,y)-image2(x,y))^2}}$$`}
-              remarkPlugins={[remarkMath]}
-              rehypePlugins={[rehypeKatex]}
-            />
-          </div>
+          {/* <div className="flex justify-center items-center w-full"> */}
+          <ReactMarkdown
+            children={`$$\\sqrt{\\sum{\\sum(image1(x,y)-image2(x,y))^2}}$$`}
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[rehypeKatex]}
+          />
+          {/* </div> */}
           where the sum is taken over the pixel values.
         </p>
         <p>
@@ -515,38 +513,34 @@ $$
           left, right, top, and bottom side of the BGR images before aligning
           them.
         </p>
-        <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
+        <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
           {singleScaleImages.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">
-                    {m.name.toLocaleUpperCase()}.jpg
-                  </p>
-                  <p>Best shift for G: {m.bestShiftG}</p>
-                  <p>Best shift for B: {m.bestShiftB}</p>
-                  <p>Runtime using L2: {m.l2Runtime}</p>
-                  <p>Runtime using NCC: {m.nccRuntime}</p>
-                </div>
+            <div
+              key={m.name}
+              className="flex-none w-full flex flex-col items-center justify-center snap-center px-4"
+            >
+              <div className="overflow-hidden">
+                <Image
+                  id={m.name}
+                  src={m.path}
+                  alt={m.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-[500px]"
+                />
               </div>
-            </SwiperSlide>
+              <div className="mt-2 text-center">
+                <p className="font-semibold">
+                  {m.name.toLocaleUpperCase()}.jpg
+                </p>
+                <p>Best shift for G: {m.bestShiftG}</p>
+                <p>Best shift for B: {m.bestShiftB}</p>
+                <p>Runtime using L2: {m.l2Runtime}</p>
+                <p>Runtime using NCC: {m.nccRuntime}</p>
+              </div>
+            </div>
           ))}
-        </Swiper>
+        </div>
       </section>
 
       <section className="space-y-4">
@@ -665,7 +659,38 @@ $$
           <p>image pyramid level = 4</p>
           <p>search range = (-30, 30)</p>
         </div>
-        <Swiper
+
+        <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
+          {multiScaleImages.map((m) => (
+            <div
+              key={m.name}
+              className="flex-none w-full flex flex-col items-center justify-center snap-center px-4"
+            >
+              <div className="flex flex-col items-center justify-center h-full px-4">
+                <div className="overflow-hidden">
+                  <Image
+                    id={m.name}
+                    src={m.path}
+                    alt={m.name}
+                    width={600}
+                    height={600}
+                    className="object-cover w-full h-[500px]"
+                  />
+                </div>
+                <div className="mt-2 text-center">
+                  <p className="font-semibold">
+                    {m.name.toLocaleUpperCase()}.jpg
+                  </p>
+                  <p>Best shift for G: {m.bestShiftG}</p>
+                  <p>Best shift for B: {m.bestShiftB}</p>
+                  <p>Runtime using L2: {m.l2Runtime}</p>
+                  <p>Runtime using NCC: {m.nccRuntime}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* <Swiper
           pagination={{ type: "progressbar" }}
           navigation={true}
           modules={[Pagination, Navigation]}
@@ -695,7 +720,7 @@ $$
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
         <h4 className="text-lg font-semibold mb-2">
           More examples from
           <a
@@ -707,7 +732,34 @@ $$
             &nbsp;the Prokudin‑Gorskii collection
           </a>
         </h4>
-        <Swiper
+        <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
+          {multiScaleImagesMore.map((m) => (
+            <div
+              key={m.name}
+              className="flex-none w-full flex flex-col items-center justify-center snap-center px-4"
+            >
+              <div className="overflow-hidden">
+                <Image
+                  id={m.name}
+                  src={m.path}
+                  alt={m.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-[500px]"
+                />
+              </div>
+              <div className="mt-2 text-center">
+                <p className="font-semibold">
+                  {m.name.toLocaleUpperCase()}.jpg
+                </p>
+                <p>Best shift for G: {m.bestShiftG}</p>
+                <p>Best shift for B: {m.bestShiftB}</p>
+                <p>Runtime: {m.runtime}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* <Swiper
           pagination={{ type: "progressbar" }}
           navigation={true}
           modules={[Pagination, Navigation]}
@@ -737,7 +789,7 @@ $$
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
         <div className="float-right ml-4 mb-2 flex flex-col items-center">
           <Image
             id="explanation"
@@ -893,7 +945,7 @@ $$
         <div className="font-bold text-lg">
           NCC + Laplacian Pyramid alignment results
         </div>
-        <Swiper
+        {/* <Swiper
           pagination={{ type: "progressbar" }}
           navigation={true}
           modules={[Pagination, Navigation]}
@@ -923,7 +975,34 @@ $$
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
+        <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
+          {laplacianImages.map((m) => (
+            <div
+              key={m.name}
+              className="flex-none w-full flex flex-col items-center justify-center snap-center px-4"
+            >
+              <div className="overflow-hidden">
+                <Image
+                  id={m.name}
+                  src={m.path}
+                  alt={m.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-[500px]"
+                />
+              </div>
+              <div className="mt-2 text-center">
+                <p className="font-semibold">
+                  {m.name.toLocaleUpperCase()}.jpg
+                </p>
+                <p>Best shift for G: {m.bestShiftG}</p>
+                <p>Best shift for B: {m.bestShiftB}</p>
+                <p>Runtime: {m.runtime}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4">
@@ -957,8 +1036,8 @@ $$
           final, refined bounding box, and the result is saved.
         </p>
 
-        <div className="font-bold text-lg">Automatic cropping result</div>
-        <Swiper
+        <div className="font-bold text-lg">Automatic cropping results</div>
+        {/* <Swiper
           pagination={{ type: "progressbar" }}
           navigation={true}
           modules={[Pagination, Navigation]}
@@ -985,7 +1064,31 @@ $$
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
+        <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
+          {autoCroppedImages.map((m) => (
+            <div
+              key={m.name}
+              className="flex-none w-full flex flex-col items-center justify-center snap-center px-4"
+            >
+              <div className="overflow-hidden">
+                <Image
+                  id={m.name}
+                  src={m.path}
+                  alt={m.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-[500px]"
+                />
+              </div>
+              <div className="mt-2 text-center">
+                <p className="font-semibold">
+                  {m.name.toLocaleUpperCase()}.jpg
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4">
@@ -1103,9 +1206,9 @@ $$
           className="mx-auto  "
         />
         <div className="font-bold text-lg">
-          Automatic contrast result (after auto cropping)
+          Automatic contrast results (after auto cropping)
         </div>
-        <Swiper
+        {/* <Swiper
           pagination={{ type: "progressbar" }}
           navigation={true}
           modules={[Pagination, Navigation]}
@@ -1132,7 +1235,31 @@ $$
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
+        <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
+          {autoContrastImages.map((m) => (
+            <div
+              key={m.name}
+              className="flex-none w-full flex flex-col items-center justify-center snap-center px-4"
+            >
+              <div className="overflow-hidden">
+                <Image
+                  id={m.name}
+                  src={m.path}
+                  alt={m.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-[500px]"
+                />
+              </div>
+              <div className="mt-2 text-center">
+                <p className="font-semibold">
+                  {m.name.toLocaleUpperCase()}.jpg
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4">
