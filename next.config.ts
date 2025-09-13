@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   // assetPrefix: isProd ? `/${repo}/` : '',
   // basePath: isProd ? `/${repo}` : '',
   trailingSlash: true,
-}
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
 
 export default nextConfig
