@@ -7,9 +7,6 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-// import "swiper/css";
-// import "swiper/css/pagination";
-// import "swiper/css/navigation";
 import "katex/dist/katex.min.css";
 
 export default function Proj1() {
@@ -513,6 +510,7 @@ $$
           left, right, top, and bottom side of the BGR images before aligning
           them.
         </p>
+        <h4>Scroll to see alignment results:</h4>
         <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
           {singleScaleImages.map((m) => (
             <div
@@ -650,7 +648,7 @@ $$
           overlapping pixels gives us higher NCC score (an dhigher correlation),
           and better alignment result.
         </p>
-        <h4 className="text-lg font-bold">Alignment results:</h4>
+        <h4 className="text-lg font-bold">Scroll to see alignment results:</h4>
         <p>
           Here are the fixed parameters I used for the alignment alogrithm:{" "}
         </p>
@@ -689,39 +687,8 @@ $$
             </div>
           ))}
         </div>
-        {/* <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
-          {multiScaleImages.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">
-                    {m.name.toLocaleUpperCase()}.jpg
-                  </p>
-                  <p>Best shift for G: {m.bestShiftG}</p>
-                  <p>Best shift for B: {m.bestShiftB}</p>
-                  <p>Runtime: {m.runtime}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
         <h4 className="text-lg font-semibold mb-2">
-          More examples from
+          Scroll to see more examples from
           <a
             href="https://www.loc.gov/collections/prokudin-gorskii/?st=grid"
             target="_blank"
@@ -758,37 +725,7 @@ $$
             </div>
           ))}
         </div>
-        {/* <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
-          {multiScaleImagesMore.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">
-                    {m.name.toLocaleUpperCase()}.jpg
-                  </p>
-                  <p>Best shift for G: {m.bestShiftG}</p>
-                  <p>Best shift for B: {m.bestShiftB}</p>
-                  <p>Runtime: {m.runtime}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
+
         <div className="float-right ml-4 mb-2 flex flex-col items-center">
           <Image
             id="explanation"
@@ -942,39 +879,8 @@ $$
         />
 
         <div className="font-bold text-lg">
-          NCC + Laplacian Pyramid alignment results
+          Scroll to see NCC + Laplacian Pyramid alignment results
         </div>
-        {/* <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
-          {laplacianImages.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">
-                    {m.name.toLocaleUpperCase()}.jpg
-                  </p>
-                  <p>Best shift for G: {m.bestShiftG}</p>
-                  <p>Best shift for B: {m.bestShiftB}</p>
-                  <p>Runtime: {m.runtime}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
         <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
           {laplacianImages.map((m) => (
             <div
@@ -1035,35 +941,9 @@ $$
           final, refined bounding box, and the result is saved.
         </p>
 
-        <div className="font-bold text-lg">Automatic cropping results</div>
-        {/* <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
-          {autoCroppedImages.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">
-                    {m.name.toLocaleUpperCase()}.jpg
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
+        <div className="font-bold text-lg">
+          Scroll to see automatic cropping results
+        </div>
         <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
           {autoCroppedImages.map((m) => (
             <div
@@ -1205,36 +1085,8 @@ $$
           className="mx-auto  "
         />
         <div className="font-bold text-lg">
-          Automatic contrast results (after auto cropping)
+          Scroll to see automatic contrast results (after auto cropping)
         </div>
-        {/* <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
-          {autoContrastImages.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">
-                    {m.name.toLocaleUpperCase()}.jpg
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
         <div className="flex flex-row overflow-x-scroll snap-x snap-mandatory h-full w-full">
           {autoContrastImages.map((m) => (
             <div
@@ -1457,54 +1309,6 @@ $$
           </div>
         </div>
       </section>
-
-      {/* <section className="space-y-4">
-        <h2 className="text-xl font-semibold">A fun coincidence</h2>
-        <p>
-          <a
-            href="https://en.wikipedia.org/wiki/Sayyid_Mir_Muhammad_Alim_Khan"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
-          >
-            Emir Sayyid Mir Muhammad Alim Khan&nbsp;
-          </a>
-          was the last emir of the Uzbek Manghit dynasty, rulers of the Emirate
-          of Bukhara in Central Asia. I was just traveling in Central Asia in
-          Aug 2025, and I spent a few days in Bukhara, a hot, desert, and
-          hospitable city on the south central part of Uzbekistan. I visted the
-          Ark Fortress of Bukhara, and learned about the history of the Bukhara
-          Empire. It was such a coincidence that I am now seeing Emir in my
-          Computer Vision project. Here are some images of the monuments in the
-          city I captured with my lens.
-        </p>
-        <Swiper
-          pagination={{ type: "progressbar" }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="h-full w-full"
-        >
-          {bukhara.map((m) => (
-            <SwiperSlide key={m.name}>
-              <div className="flex flex-col items-center justify-center h-full px-4">
-                <div className="overflow-hidden">
-                  <Image
-                    id={m.name}
-                    src={m.path}
-                    alt={m.name}
-                    width={600}
-                    height={600}
-                    className="object-cover w-full h-[500px]"
-                  />
-                </div>
-                <div className="mt-2 text-center">
-                  <p className="font-semibold">{m.name.toLocaleUpperCase()}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </section> */}
     </main>
   );
 }
