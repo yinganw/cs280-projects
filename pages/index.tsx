@@ -4,16 +4,22 @@ export default function Home() {
 
   const projects = [
     {
-      id: 'proj0',
-      title: 'Project 0: Becoming Friends with Your Camera',
-      description: 'Selfies, perspective, and dolly zoom exercises',
-      href: '/proj0',
+      id: "proj0",
+      title: "Project 0: Becoming Friends with Your Camera",
+      description: "Selfies, perspective, and dolly zoom exercises",
+      href: "/proj0",
     },
     {
-      id: 'proj1',
-      title: 'Project 1: Images of the Russian Empire',
-      description: 'Colorizing the Prokudin-Gorskii photo collection',
-      href: '/proj1',
+      id: "proj1",
+      title: "Project 1: Images of the Russian Empire",
+      description: "Colorizing the Prokudin-Gorskii photo collection",
+      href: "/proj1",
+    },
+    {
+      id: "proj2",
+      title: "Project 2: Fun with Filters and Frequencies!",
+      description: "Filters, frequencies, and blending images",
+      href: "/proj2",
     },
   ];
 
