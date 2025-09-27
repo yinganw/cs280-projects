@@ -234,6 +234,22 @@ export default function Proj2() {
       path: "/media/proj2/2.1/taj_unsharp_mask_result_alpha_10.jpg",
     },
   ];
+  const part2_1_taj_resharpened = [
+    {
+      name: "Sharpened image, alpha = 5",
+      path: "/media/proj2/2.1/taj_unsharp_mask_result_alpha_5.jpg",
+    },
+    {
+      name: "Sharpened image, alpha = 10",
+      path: "/media/proj2/2.1/taj_unsharp_mask_result_alpha_10.jpg",
+    },
+    {
+      name: "Resharpened image, applied alpha = 5 twice",
+      path: "/media/proj2/2.1/taj_unsharp_mask_result_alpha_5_resharpen_alpha_5.jpg",
+    },
+  ];
+
+  //
 
   const part2_1_presidio = [
     {
@@ -815,6 +831,24 @@ $$`;
             </div>
           ))}
         </div>
+        <p>
+          I picked the alpha = 5 sharpened image, and re-sharpened it with alpha
+          = 5 again. From the comparison below, we could see that the image with
+          two round of sharpening has the most defined edges, comparing to alpha
+          = 5 (original) or 10. The resharpened image also has a lot more noise
+          than any of the other lower alpha levels. This occurs because
+          re-sharpening amplifies the higher-frequency components that were
+          already enhanced in the first pass.
+        </p>
+        <div className="grid grid-cols-3 gap-4">
+          {part2_1_taj_resharpened.map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={400} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
+        {/* taj_unsharp_mask_result_alpha_5_resharpen_alpha_5.jpg */}
         <p>
           I also applied the unsharp mask filter process to sharpen a photo I
           took in the Presidio, San Francisco.
