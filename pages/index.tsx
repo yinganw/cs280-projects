@@ -21,6 +21,13 @@ export default function Home() {
       description: "Filters, frequencies, and blending images",
       href: "/proj2",
     },
+    {
+      id: "proj3",
+      title: "Project 3:[Auto]Stitching Photo Mosaics",
+      description:
+        " All about stitching together many photographs to create larger composite images",
+      href: "/proj3",
+    },
   ];
 
   return (
