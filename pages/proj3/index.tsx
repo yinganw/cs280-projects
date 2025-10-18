@@ -1,28 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import ReactMarkdown from "react-markdown";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
 import { InlineMath, BlockMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import SyntaxHighlighter from "react-syntax-highlighter";
-
-function MathBlock({ formula }: { formula: string }) {
-  return (
-    <div className="flex justify-center overflow-x-auto">
-      <ReactMarkdown
-        remarkPlugins={[remarkMath]}
-        rehypePlugins={[rehypeKatex]}
-        components={{
-          p: ({ children }) => <>{children}</>,
-        }}
-      >
-        {formula}
-      </ReactMarkdown>
-    </div>
-  );
-}
 
 export default function Proj3() {
   const street = [
@@ -176,6 +157,77 @@ export default function Proj3() {
     },
   ];
 
+  const harris_example = [
+    {
+      name: "Campus, ANMS comparison",
+      path: "/media/proj3/3b/campus_harris_all.jpeg",
+    },
+    {
+      name: "Campus, ANMS comparison",
+      path: "/media/proj3/3b/campus_anms_compare.jpeg",
+    },
+  ];
+
+  const descriptors = [
+    {
+      name: "Overview of all 250 descriptors",
+      path: "/media/proj3/3b/all_descriptors.jpeg",
+    },
+    {
+      name: "First 16 descriptors zoomed in",
+      path: "/media/proj3/3b/descriptors_16.jpeg",
+    },
+  ];
+
+  const matching_points = [
+    {
+      name: "Feature matching for campus",
+      path: "/media/proj3/3b/campus_matched.jpeg",
+    },
+    {
+      name: "Feature matching for door",
+      path: "/media/proj3/3b/door_matched.jpeg",
+    },
+    {
+      name: "Feature matching for street",
+      path: "/media/proj3/3b/street_matched.jpeg",
+    },
+  ];
+
+  const ransac_initial = [
+    {
+      name: "Campus, RANSAC",
+      path: "/media/proj3/3b/campus_ransac.jpg",
+    },
+    {
+      name: "Door, RANSAC",
+      path: "/media/proj3/3b/door_ransac.jpg",
+    },
+    {
+      name: "Street, RANSAC",
+      path: "/media/proj3/3b/street_ransac.jpg",
+    },
+  ];
+
+  const tuned_matching_res = [
+    {
+      name: "Door, matching features after tuning",
+      path: "/media/proj3/3b/door_matched_1000.jpeg",
+    },
+    {
+      name: "Door, RANSAC after tuning",
+      path: "/media/proj3/3b/door_ransac_1000.jpg",
+    },
+    {
+      name: "Street, matching features after tuning",
+      path: "/media/proj3/3b/street_matched_1000.jpeg",
+    },
+    {
+      name: "Street, RANSAC, after tuning",
+      path: "/media/proj3/3b/street_ransac_1000.jpg",
+    },
+  ];
+
   return (
     <main className="max-w-3xl mx-auto p-6 space-y-10">
       {/* Back Button */}
@@ -236,47 +288,49 @@ export default function Proj3() {
         <p>
           We know that for a pair of corresponding points{" "}
           <InlineMath math={"p = (x, y)^T"} /> and{" "}
-          <InlineMath math={"p = (x^{\\prime}, y^{\\prime})^T"} />,
-          <BlockMath
-            math={String.raw`
+          <InlineMath math={"p = (x^{prime}, y^{prime})^T"} />,
+        </p>
+        <BlockMath
+          math={String.raw`
     H = \begin{bmatrix}
       h_{11} & h_{12} & h_{13} \\
       h_{21} & h_{22} & h_{23} \\
       h_{31} & h_{32} & h_{33} \\
     \end{bmatrix}
   `}
-          />
+        />
+        <p>
           Since the homography is up to scale, we can set the 9th entry{" "}
           <InlineMath math="h_{33} = 1" />. And therefore, we have eight
           unknowns
-          <BlockMath
-            math={String.raw`
+        </p>
+        <BlockMath
+          math={String.raw`
     h = [h_{11}, h_{12}, h_{13}, h_{21}, h_{22}, h_{23}, h_{31}, h_{32}]^T
   `}
-          />
-        </p>
+        />
         <p>
           Given <InlineMath math={`p^{\\prime} = Hp`} />, we have
         </p>
-        <MathBlock
-          formula={`$$
-  \\begin{aligned}
-x^{\\prime} &= \\frac{h_{11}x + h_{12}y + h_{13}}{h_{31}x + h_{32}y + 1} \\\\
-y^{\\prime} &= \\frac{h_{21}x + h_{22}y + h_{23}}{h_{31}x + h_{32}y + 1}
-\\end{aligned}
-$$`}
+        <BlockMath
+          math={String.raw`
+    \begin{aligned}
+      x' &= \frac{h_{11}x + h_{12}y + h_{13}}{h_{31}x + h_{32}y + 1} \\
+      y' &= \frac{h_{21}x + h_{22}y + h_{23}}{h_{31}x + h_{32}y + 1}
+    \end{aligned}
+  `}
         />
         <p>
           Multiply both sides by the denominator, and rearrange both equations,
           we get the linear equations:
         </p>
-        <MathBlock
-          formula={`$$
-  \\begin{aligned}
-x h_{11} + y h_{12} + 1 h_{13} - x^{\\prime} x h_{31} - x^{\\prime} y h_{32} &= x^{\\prime} \\\\
-x h_{21} + y h_{22} + 1 h_{23} - y^{\\prime} x h_{31} - y^{\\prime} y h_{32} &= y^{\\prime}
-\\end{aligned}
-$$`}
+        <BlockMath
+          math={String.raw`
+\begin{aligned}
+x h_{11} + y h_{12} + 1 h_{13} - x^{\\prime} x h_{31} - x^{\prime} y h_{32} &= x^{\prime} \\
+x h_{21} + y h_{22} + 1 h_{23} - y^{\\prime} x h_{31} - y^{\prime} y h_{32} &= y^{\prime}
+\end{aligned}
+`}
         />
         <p>
           In matrix form, we have{" "}
@@ -288,47 +342,47 @@ $$`}
           , where
         </p>
 
-        <MathBlock
-          formula={`$$
+        <BlockMath
+          math={String.raw`
   A =
-\\begin{bmatrix}
-x & y & 1 & 0 & 0 & 0 & -x^{\\prime}x & -x^{\\prime}y \\\\
-0 & 0 & 0 & x & y & 1 & -y^{\\prime}x & -y^{\\prime}y \\\\
+\begin{bmatrix}
+x & y & 1 & 0 & 0 & 0 & -x^{\prime}x & -x^{\prime}y \\
+0 & 0 & 0 & x & y & 1 & -y^{\prime}x & -y^{\prime}y \\
 
-\\end{bmatrix}
-,\\quad
+\end{bmatrix}
+,\quad
 b =
-\\begin{bmatrix}
-x^{\\prime} \\\\ y^{\\prime} \\\\ 
+\begin{bmatrix}
+x^{\prime} \\ y^{\prime} \\ 
 
-\\end{bmatrix}
-  $$`}
+\end{bmatrix}
+`}
         />
         <p>
           So for n pairs of corresponding points, A will be 2n x 8, and b will
           be 2n x 1.
         </p>
-        <MathBlock
-          formula={`$$
-  A =
-\\begin{bmatrix}
-x_{1} & y_{1} & 1 & 0 & 0 & 0 & -x_{1}^{\\prime}x_{1} & -x_{1}^{\\prime}y_{1} \\\\
-0 & 0 & 0 & x_{1} & y_{1} & 1 & -y_{1}^{\\prime}x_{1} & -y_{1}^{\\prime}y_{1} \\\\
-x_{2} & y_{2} & 1 & 0 & 0 & 0 & -x_{2}^{\\prime}x_{2} & -x_{2}^{\\prime}y_{2} \\\\
-0 & 0 & 0 & x_{2} & y_{2} & 1 & -y_{2}^{\\prime}x_{2} & -y_{2}^{\\prime}y_{2} \\\\
-\\vdots & & & & & & & \\vdots \\\\
-x_{n} & y_{n} & 1 & 0 & 0 & 0 & -x_{n}^{\\prime}x_{n} & -x_{n}^{\\prime}y_{n} \\\\
-0 & 0 & 0 & x_{n} & y_{n} & 1 & -y_{n}^{\\prime}x_{n} & -y_{n}^{\\prime}y_{n}
-\\end{bmatrix}
-,\\quad
+        <BlockMath
+          math={String.raw`
+A =
+\begin{bmatrix}
+x_{1} & y_{1} & 1 & 0 & 0 & 0 & -x_{1}^{\prime}x_{1} & -x_{1}^{\prime}y_{1} \\
+0 & 0 & 0 & x_{1} & y_{1} & 1 & -y_{1}^{\prime}x_{1} & -y_{1}^{\prime}y_{1} \\
+x_{2} & y_{2} & 1 & 0 & 0 & 0 & -x_{2}^{\prime}x_{2} & -x_{2}^{\prime}y_{2} \\
+0 & 0 & 0 & x_{2} & y_{2} & 1 & -y_{2}^{\prime}x_{2} & -y_{2}^{\prime}y_{2} \\
+\vdots & & & & & & & \vdots \\
+x_{n} & y_{n} & 1 & 0 & 0 & 0 & -x_{n}^{\prime}x_{n} & -x_{n}^{\prime}y_{n} \\
+0 & 0 & 0 & x_{n} & y_{n} & 1 & -y_{n}^{\prime}x_{n} & -y_{n}^{\prime}y_{n}
+\end{bmatrix}
+,\quad
 b =
-\\begin{bmatrix}
-x_{1}^{\\prime} \\\\ y_{1}^{\\prime} \\\\ 
-x_{2}^{\\prime} \\\\ y_{2}^{\\prime} \\\\
-\\vdots \\\\
-x_{n}^{\\prime} \\\\ y_{n}^{\\prime}
-\\end{bmatrix}
-  $$`}
+\begin{bmatrix}
+x_{1}^{\prime} \\ y_{1}^{\prime} \\
+x_{2}^{\prime} \\ y_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime} \\ y_{n}^{\prime}
+\end{bmatrix}
+`}
         />
         <p>
           <span className="font-semibold">Identify correspondences: </span>I
@@ -363,8 +417,8 @@ x_{n}^{\\prime} \\\\ y_{n}^{\\prime}
         <p>
           <span className="font-semibold">Compute H: </span>
           To solve for h, we can use the least-squres where{" "}
-          <MathBlock
-            formula={`$$
+          <InlineMath
+            math={`$$
 h = (A^T A)^{-1} A^T b
   $$`}
           />
@@ -538,9 +592,10 @@ h = (A^T A)^{-1} A^T b
           I then built a mask for the overlapping area of the two images, and
           took half of the pixel intensity in the left image and half of the
           pixel intensity in the right image within the overlapping area. The
-          equation to compute the canvas image is as follows:
+          equation to compute the canvas image is:
         </p>
-        <MathBlock formula={`$$I = 0.5 I_1 + 0.5 I_2$$`} />
+        <BlockMath math="I = 0.5 I_1 + 0.5 I_2" />
+
         <p>
           This was an attempt to blend the two images together, but the visual
           seams are still very obvious. Using this method, we still have full
@@ -568,10 +623,10 @@ h = (A^T A)^{-1} A^T b
           input array, and would help create alpha masks that indicates distance
           from each pixel to the edges of the images.
         </p>
-        <MathBlock
-          formula={`$$
-    \\alpha = \\frac{\\text{distance\\_transform}}{\\max(\\text{distance\\_transform})}
-  $$`}
+        <BlockMath
+          math={String.raw`
+    \alpha = \frac{\text{distance\_transform}}{\max(\text{distance\_transform})}
+  `}
         />
         <p>
           Pixels near the edges have smaller alpha values, while central pixels
@@ -590,10 +645,11 @@ h = (A^T A)^{-1} A^T b
           ))}
         </div>
         <p>Now we have the blending function:</p>
-        <MathBlock
-          formula={`$$
-    I = \\frac{\\alpha_1 \\cdot I_1 + \\alpha_2 \\cdot I_2}{\\alpha_1 + \\alpha_2}
-  $$`}
+
+        <BlockMath
+          math={String.raw`
+    I = \frac{\alpha_1 \cdot I_1 + \alpha_2 \cdot I_2}{\alpha_1 + \alpha_2}
+  `}
         />
 
         <p>
@@ -649,12 +705,13 @@ h = (A^T A)^{-1} A^T b
           <InlineMath math={`(x, y)`} /> to spherical angles{" "}
           <InlineMath math={`(\\theta, \\phi)`} /> using a focal length{" "}
           <InlineMath math={`f`} />:
-          <MathBlock
-            formula={`$$
-    \\theta = \\arctan\\frac{x - c_x}{f}, \\quad
-    \\phi = \\arctan\\frac{y - c_y}{f}
-  $$`}
-          />
+        </p>
+        <BlockMath
+          math={String.raw`
+\theta = \arctan\frac{x - c_x}{f}, \quad
+    \phi = \arctan\frac{y - c_y}{f}  `}
+        />
+        <p>
           where <InlineMath math={`(c_x, c_y)`} /> is the image center. This
           creates a curved projection that simulates a fisheye effect.
         </p>
@@ -664,18 +721,18 @@ h = (A^T A)^{-1} A^T b
           </span>{" "}
           For each pixel on the spherical canvas, we compute the corresponding
           coordinates in the original images. For the first image:
-          <MathBlock
-            formula={`$$
-    x_1 = f \\cdot \\tan(\\theta) + c_{x1}, \\quad
-    y_1 = \\frac{f \\cdot \\tan(\\phi)}{\\cos(\\theta)} + c_{y1}
-  $$`}
-          />
+        </p>
+        <BlockMath
+          math={String.raw`
+x_1 = f \cdot \tan(\theta) + c_{x1}, \quad
+    y_1 = \frac{f \cdot \tan(\phi)}{\cos(\theta)} + c_{y1}`}
+        />
+        <p>
           and for the second image, we apply the homography{" "}
           <InlineMath math={`H`} /> that maps im1 → im2:
-          <MathBlock
-            formula={`$$
-    \\begin{bmatrix} x_2 \\\\ y_2 \\\\ 1 \\end{bmatrix} = H \\begin{bmatrix} x_1 \\\\ y_1 \\\\ 1 \\end{bmatrix}
-  $$`}
+          <InlineMath
+            math={`    \\begin{bmatrix} x_2 \\\\ y_2 \\\\ 1 \\end{bmatrix} = H \\begin{bmatrix} x_1 \\\\ y_1 \\\\ 1 \\end{bmatrix}
+`}
           />
           This ensures that features align correctly across the two images.
         </p>
@@ -707,6 +764,318 @@ h = (A^T A)^{-1} A^T b
             <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
           </div>
         ))}
+      </section>
+      <h2 className="text-xl font-semibold">
+        [due Oct 17, 2025] Project 3B: FEATURE MATCHING for AUTOSTITCHING
+      </h2>
+      <section className="space-y-4">
+        <h3 className="text-xl font-semibold">B.1: Harris Corner Detection</h3>
+        <p>
+          To perform auto-stitching, we would need to identify a set of features
+          to match from image 1 to image 2. And the first step towards this is
+          to identify interest points in one single image. For this project, we
+          are using the Harris corner detection method, performed on a single
+          scale.
+        </p>
+        <p>
+          With <InlineMath math={"\\sigma=1"} />, the Harris matrix at level{" "}
+          <InlineMath math={"l"} /> and and position
+          <InlineMath math={"(x, y)"} /> is the smoothed outer product of the
+          gradients:
+        </p>
+        <BlockMath
+          math={String.raw`
+    H_l(x, y) = \left( \nabla_{\sigma_d} P_l(x, y) \, \nabla_{\sigma_d} P_l(x, y)^{T} \right) * g_{\sigma_i}(x, y)
+  `}
+        />
+        {harris_example.slice(0, 1).map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={300} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+        <p>
+          With <code>min_distance</code> set to 1, we see that thousands of
+          points are generated on the image.
+        </p>
+        <p>
+          <span className="font-semibold">
+            Adaptive non-maximal suppression.{" "}
+          </span>
+          The computational cost of matching is superlinear in the number of
+          interest points, using Harris corners. Also, it is important that
+          interest points are spatially well distributed over the image, since
+          the area of overlap between a pair of images may be small for the
+          image stitching case. To reduce computational cost and improve
+          performace, we could use adaptive non-maximal suppression (ANMS) to
+          select a fixed number of interest points from each image.
+        </p>
+        <p>
+          ANMS essentially suppresses all local harris corners wihtin a range of
+          suppression radius <code>r</code>, unless the point is a local maximum
+          within the suppression radius. Thus the minimum suppression radius{" "}
+          <InlineMath math="r_i" /> is given by
+        </p>
+        <BlockMath
+          math={String.raw`
+    r_i = \min_j \, |x_i - x_j| \quad \text{s.t.} \quad f(x_i) < c_{\text{robust}} f(x_j), \; x_j \in \zeta
+  `}
+        />
+        <p>
+          where <InlineMath math="x_i" /> is a 2D interest point image location,
+          and <InlineMath math="\zeta" /> is the set of all interest point
+          locations. We use a value <InlineMath math="c_{robust}" /> = 0.9 to
+          ensure that a neighbour must have significantly higher strength for
+          suppression to take place. We select the <InlineMath math="n_{ip}" />{" "}
+          = 250 interest points with the largest values of{" "}
+          <InlineMath math="r_i" />.
+        </p>
+        <p>
+          I used <code>min_distance=28</code> for the naive Harris corner
+          detection method. This gives us around 254 points. For my Harris
+          corner detections with ANMC, I picked{" "}
+          <code>n=250, c_robust=0.9, min_distance_1</code> to get 250 corner
+          features in the same image.
+        </p>
+        {harris_example.slice(1, 2).map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={800} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+      </section>
+      <section className="space-y-4">
+        <h3 className="text-xl font-semibold">
+          B.2: Feature Descriptor Extraction
+        </h3>
+        <p>
+          Once we have determined where to place our interest points, we need to
+          extract a description of the local image structure that will support
+          reliable and efficient matching of features across images. A simple
+          way to do that is to first get 40 x 40 window, with each interest
+          point as center. Then we downsample the window by 5 times, so we get
+          an 8 x 8 lower-res patch for each interest points.
+        </p>
+        <p>
+          After sampling, the descriptor vector is normalised so that the mean
+          is 0 and the standard deviation is 1. This makes the features
+          invariant to affine changes in intensity (bias and gain).
+        </p>
+        <p>
+          Below is an overview of all 250 normalized feature descriptors, with
+          their corresponding 40x40 window. I have also picked the first 16
+          descriptors for a more detailed view.
+        </p>
+        {descriptors.map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={800} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+      </section>
+      <section className="space-y-4">
+        <h3 className="text-xl font-semibold">B.3: Feature Matching</h3>
+        <p>
+          Given the patches extracted from the previous step, the goal of the
+          matching stage is to find geometrically consistent feature matches
+          between image pairs. This proceeds as follows. First, we find a set of
+          candidate feature matches using an approximate nearest neighbour
+          algorithm. Then we refine matches using an outlier rejection procedure
+          based on the noise statistics of correct/incorrect matches. This would
+          give us the feature matches in the image pairs.
+        </p>
+        <div className="float-right ml-4 mb-2 flex flex-col items-center">
+          <Image
+            src={"/media/proj3/3b/nn_fig.png"}
+            alt={"lowe fig"}
+            width={200}
+            height={200}
+          />
+        </div>
+        <p>
+          <span className="font-semibold">Lowe&apos;s trick. </span>
+          Lowe’s ratio test compares the error of the first nearest neighbor
+          (1-NN) to the second nearest neighbor (2-NN) for a given feature.
+          Using the ratio{" "}
+          <InlineMath math={"e_{1\text{-NN}} / e_{2\text{-NN}} "} /> instead of
+          the absolute 1-NN error provides better separation between correct and
+          incorrect matches. This works because correct matches have
+          consistently lower errors than incorrect matches, but the overall
+          error scale varies across features. The 2-NN distance serves as an
+          estimate of the outlier (incorrect match) distance, allowing a
+          discriminative comparison rather than assuming uniform Gaussian noise
+          in feature space.
+        </p>
+        <p>
+          For this project, I initially set an error threshold{" "}
+          <code>threshold_error_nn=0.3</code>, based on rough estimation from
+          the NN-threshold chart in the{" "}
+          <a
+            href="https://cal-cs180.github.io/fa25/hw/proj3/Papers/MOPS.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            paper
+          </a>
+          .
+        </p>
+        <p>
+          Using the approach above, I obtained matching points for each image
+          pairs as below.
+        </p>
+        {matching_points.map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={800} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+      </section>
+      <section className="space-y-4">
+        <h3 className="font-semibold">B.4: RANSAC for Robust Homography</h3>
+        <p>
+          Now is time to render the auto-stitching images. We use the RANSAC
+          algorithm to create the homography transformation. Below is the RANSAC
+          algorithm I followed to compute robust homography.
+        </p>
+        <p>
+          <strong>Random Sample Consensus (RANSAC) Algorithm:</strong>
+          <br />
+          1. Randomly select 4 pairs of matching feature points.
+          <br />
+          2. Compute the homography matrix H.
+          <br />
+          3. Evaluate H on all matches:
+          <br />
+          &emsp;&emsp;a. Define an <code>inlier_threshold</code> to determine if
+          a transformed point is an inlier (i.e., within the threshold distance
+          of its match in image 2).
+          <br />
+          &emsp;&emsp;b. Count the total number of inliers.
+          <br />
+          4. Keep the H with the highest number of inliers.
+          <br />
+          5. Repeat for a specified number of iterations.
+          <br />
+          6. Recompute H using all inliers to obtain the final homography.
+        </p>
+        <p>
+          The above algorithm has a few parameters, and below are the ones I
+          used for my initial RANSAC computation.
+        </p>
+        <SyntaxHighlighter language="python">
+          {`# Number of points sampled from ANMS
+num_points=250
+# Peak local maximum distance in ANMS
+min_distance=1
+# Error threshold for nearest neighbor algorithm, threshold = err_1nn / err_2nn
+threshold_error_nn=0.3
+# RANSAC inliner threshold: range for features to be considered as inliners
+inliner_threshold=5
+#RANSAC number of iterations
+num_iters=500
+`}
+        </SyntaxHighlighter>
+        <p>Here are the result homographies my RANSAC algorithm produced.</p>
+        <p className="my-4">
+          As one could tell, the RANSAC-computed homography for the campus pair
+          is almost perfect, while the street pair is off by obvious error
+          margins. If one look closely to the door homography, some misalignment
+          is in the bottom right corner of the glass door as well. Why does this
+          happen, and how could we improve the alignment?
+        </p>
+        {ransac_initial.map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={800} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+        <p>
+          <span className="font-semibold">Improvements. </span>This is mostly
+          because both the Door and the Street image pairs have yielded very few
+          matching points in step B.3. While the campus image set have 32 pairs
+          of points for RANSAC to randomly select from, the other two images
+          only had 7 pairs.
+        </p>
+        <p>
+          To fix this, I tuned the parameters and bumped up number of points
+          significantly, from 250 to 1000, so that each image pairs would have
+          more matching features to perform RANSAC with. I also tuned some other
+          parameters, listed below:
+        </p>
+        <SyntaxHighlighter language="python">
+          {`# Number of points sampled from ANMS
+num_points=100 # used to be 250
+# Peak local maximum distance in ANMS
+min_distance=10 # used to be 1
+# Error threshold for nearest neighbor algorithm, threshold = err_1nn / err_2nn
+threshold_error_nn=0.25 # used to be 0.3
+# RANSAC inliner threshold: range for features to be considered as inliners
+inliner_threshold=5 # stayed the same
+#RANSAC number of iterations
+num_iters=1000 # used to be 500
+`}
+        </SyntaxHighlighter>
+        {tuned_matching_res.map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={800} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+        <p>
+          <span className="font-semibold">
+            Comparison of before and after tuning parameters.{" "}
+          </span>
+          We could see from the result that tuning the parameters increased
+          number of matching pairs, and improved the alignment in the homography
+          effect.
+        </p>
+        <table className="min-w-full table-auto border-collapse my-4">
+          <thead>
+            <tr className="bg-gray-50">
+              <th className="px-4 py-3 text-left text-sm font-medium">
+                Image Pair Name
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-medium">
+                Num of matching features, before tuning
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-medium">
+                Num of matching features, after tuning
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr className="odd:bg-white even:bg-gray-50">
+              <td className="px-4 py-4 text-sm font-medium">Door</td>
+              <td className="px-4 py-4 text-sm">7 pairs</td>
+              <td className="px-4 py-4 text-sm">16 pairs</td>
+            </tr>
+            <tr className="odd:bg-white even:bg-gray-50">
+              <td className="px-4 py-4 text-sm font-medium">Campus</td>
+              <td className="px-4 py-4 text-sm">7 pairs</td>
+              <td className="px-4 py-4 text-sm">23 pairs</td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          {[ransac_initial.at(-1), tuned_matching_res.at(3)].map(
+            (img, idx) =>
+              img && (
+                <div key={idx} className="flex flex-col items-center">
+                  <Image
+                    src={img.path}
+                    alt={img.name}
+                    width={400}
+                    height={200}
+                  />
+                  <p className="mt-2 text-sm font-medium text-center">
+                    {img.name}
+                  </p>
+                </div>
+              )
+          )}
+        </div>
       </section>
     </main>
   );
