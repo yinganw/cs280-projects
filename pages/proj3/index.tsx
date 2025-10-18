@@ -159,8 +159,12 @@ export default function Proj3() {
 
   const harris_example = [
     {
-      name: "Campus, ANMS comparison",
+      name: "Campus, Harris corners, min_distance=1",
       path: "/media/proj3/3b/campus_harris_all.jpeg",
+    },
+    {
+      name: "Campus, Harris corners, min_distance=28",
+      path: "/media/proj3/3b/campus_harris_254.jpeg",
     },
     {
       name: "Campus, ANMS comparison",
@@ -225,6 +229,40 @@ export default function Proj3() {
     {
       name: "Street, RANSAC, after tuning",
       path: "/media/proj3/3b/street_ransac_1000.jpg",
+    },
+  ];
+
+  const campus_src_rot = [
+    {
+      name: "Campus left",
+      path: "/media/proj3/3b/campus_left_rotated.jpeg",
+    },
+    {
+      name: "Campus right",
+      path: "/media/proj3/3b/campus_right.jpeg",
+    },
+  ];
+
+  const rot = [
+    {
+      name: "Campus, Harris corners with orientation",
+      path: "/media/proj3/3b/campus_harris_orientation.jpeg",
+    },
+    {
+      name: "Campus, Harris + ANMS with orientation ",
+      path: "/media/proj3/3b/campus_anms_orientation.jpeg",
+    },
+    {
+      name: "Feature descriptors with rotation invarance",
+      path: "/media/proj3/3b/descriptors_rot_16.jpeg",
+    },
+    {
+      name: "Campus, matching features with rotation invarance",
+      path: "/media/proj3/3b/campus_matched_rot_250.jpeg",
+    },
+    {
+      name: "Campus, auto-stitched mosaid using rotation invarance",
+      path: "/media/proj3/3b/campus_ransac_rot_250.jpg",
     },
   ];
 
@@ -423,9 +461,13 @@ h = (A^T A)^{-1} A^T b
   $$`}
           />
           In code, I used{" "}
-          <SyntaxHighlighter language="python">
-            {"h, _, _, _ = np.linalg.lstsq(A, b, rcond=None) "}
-          </SyntaxHighlighter>{" "}
+        </p>
+
+        <SyntaxHighlighter language="python">
+          {"h, _, _, _ = np.linalg.lstsq(A, b, rcond=None) "}
+        </SyntaxHighlighter>
+        <p>
+          {" "}
           to solve for the 8 unknowns, and append h_33 = 1 to the bottom right
           corner of the 3x3 matrix to get H. Below are the H matrices for each
           of the image sets above, using H = computeH(im1_pts,im2_pts):
@@ -788,16 +830,20 @@ x_1 = f \cdot \tan(\theta) + c_{x1}, \quad
     H_l(x, y) = \left( \nabla_{\sigma_d} P_l(x, y) \, \nabla_{\sigma_d} P_l(x, y)^{T} \right) * g_{\sigma_i}(x, y)
   `}
         />
-        {harris_example.slice(0, 1).map((img, idx) => (
-          <div key={idx} className="flex flex-col items-center">
-            <Image src={img.path} alt={img.name} width={300} height={200} />
-            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
-          </div>
-        ))}
         <p>
           With <code>min_distance</code> set to 1, we see that thousands of
-          points are generated on the image.
+          points are generated on the image. With <code>min_distance=28</code>,
+          the naive Harris corner detection method gives us around 254 points.
         </p>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          {harris_example.slice(0, 2).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={300} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
+
         <p>
           <span className="font-semibold">
             Adaptive non-maximal suppression.{" "}
@@ -831,13 +877,14 @@ x_1 = f \cdot \tan(\theta) + c_{x1}, \quad
           <InlineMath math="r_i" />.
         </p>
         <p>
-          I used <code>min_distance=28</code> for the naive Harris corner
-          detection method. This gives us around 254 points. For my Harris
-          corner detections with ANMC, I picked{" "}
-          <code>n=250, c_robust=0.9, min_distance_1</code> to get 250 corner
-          features in the same image.
+          To avoid ANMS returning local maximum in a flat area (where gradient
+          value approaches 0), I added a threshold so that flatter areas in the
+          image gets artificially large suppression radius. This is effective,
+          as the below ANMS harris corners are all concentrated along the edges
+          and corners of the building, rather than distributed in the sky like
+          the one without using ANMS.
         </p>
-        {harris_example.slice(1, 2).map((img, idx) => (
+        {harris_example.slice(2, 3).map((img, idx) => (
           <div key={idx} className="flex flex-col items-center">
             <Image src={img.path} alt={img.name} width={800} height={200} />
             <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
@@ -972,30 +1019,104 @@ min_distance=1
 threshold_error_nn=0.3
 # RANSAC inliner threshold: range for features to be considered as inliners
 inliner_threshold=5
-#RANSAC number of iterations
-num_iters=500
+# RANSAC number of iterations
+num_iters=1000
 `}
         </SyntaxHighlighter>
         <p>Here are the result homographies my RANSAC algorithm produced.</p>
-        <p className="my-4">
-          As one could tell, the RANSAC-computed homography for the campus pair
-          is almost perfect, while the street pair is off by obvious error
-          margins. If one look closely to the door homography, some misalignment
-          is in the bottom right corner of the glass door as well. Why does this
-          happen, and how could we improve the alignment?
-        </p>
+
         {ransac_initial.map((img, idx) => (
           <div key={idx} className="flex flex-col items-center">
             <Image src={img.path} alt={img.name} width={800} height={200} />
             <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
           </div>
         ))}
+        <h3 className="font-semibold">Comparing manual and auto stitching</h3>
+        <p>
+          Below are side-by-side comparisons between manual and auto stitching.
+          Manual stitching images are from Project 3 part A. We could see that
+          while the campus and door image sets have very similar homography
+          alignment results, manual stiching outperforms auto stitching in the
+          street image set.
+        </p>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          {campus.slice(2, 3).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={600} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">
+                Campus, manual stitching
+              </p>
+            </div>
+          ))}
+          {ransac_initial.slice(0, 1).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={600} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">
+                Campus, auto stitching
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          {door.slice(2, 3).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={600} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">
+                Door, manual stitching
+              </p>
+            </div>
+          ))}
+          {ransac_initial.slice(1, 2).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={600} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">
+                Door, auto stitching
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          {street.slice(2, 3).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={600} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">
+                Street, manual stitching
+              </p>
+            </div>
+          ))}
+          {ransac_initial.slice(2, 3).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={600} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">
+                Street, auto stitching
+              </p>
+            </div>
+          ))}
+        </div>
+        <p>
+          If you zoom into the street auto-stitching image, you could see blurs
+          on the top right corner of the building.
+        </p>
+        <div className="float-left mr-4 mb-2 flex flex-col items-center">
+          <Image
+            src={"/media/proj3/3b/street_blur.jpeg"}
+            alt={"Blur in auto-stitched Street mosaic"}
+            width={200}
+            height={200}
+          />
+        </div>
+        <p className="my-4">
+          As one could tell, the RANSAC-computed homography for the campus pair
+          and the door pair are almost perfect, while the street pair is off by
+          obvious error margins. If one look closely to the street homography,
+          the building has some misalignment . Why does this happen, and how
+          could we improve the alignment?
+        </p>
         <p>
           <span className="font-semibold">Improvements. </span>This is mostly
-          because both the Door and the Street image pairs have yielded very few
-          matching points in step B.3. While the campus image set have 32 pairs
-          of points for RANSAC to randomly select from, the other two images
-          only had 7 pairs.
+          because the Street image pairs has yielded very few matching points in
+          step B.3. While the campus image set have 62 pairs of points for
+          RANSAC to randomly select from, the street images only had 9 pairs.
         </p>
         <p>
           To fix this, I tuned the parameters and bumped up number of points
@@ -1009,11 +1130,11 @@ num_points=100 # used to be 250
 # Peak local maximum distance in ANMS
 min_distance=10 # used to be 1
 # Error threshold for nearest neighbor algorithm, threshold = err_1nn / err_2nn
-threshold_error_nn=0.25 # used to be 0.3
+threshold_error_nn=0.3 # stayed the same
 # RANSAC inliner threshold: range for features to be considered as inliners
 inliner_threshold=5 # stayed the same
 #RANSAC number of iterations
-num_iters=1000 # used to be 500
+num_iters=1000 # stayed the same
 `}
         </SyntaxHighlighter>
         {tuned_matching_res.map((img, idx) => (
@@ -1048,12 +1169,12 @@ num_iters=1000 # used to be 500
           <tbody>
             <tr className="odd:bg-white even:bg-gray-50">
               <td className="px-4 py-4 text-sm font-medium">Door</td>
-              <td className="px-4 py-4 text-sm">7 pairs</td>
+              <td className="px-4 py-4 text-sm">10 pairs</td>
               <td className="px-4 py-4 text-sm">16 pairs</td>
             </tr>
             <tr className="odd:bg-white even:bg-gray-50">
               <td className="px-4 py-4 text-sm font-medium">Campus</td>
-              <td className="px-4 py-4 text-sm">7 pairs</td>
+              <td className="px-4 py-4 text-sm">9 pairs</td>
               <td className="px-4 py-4 text-sm">23 pairs</td>
             </tr>
           </tbody>
@@ -1076,6 +1197,97 @@ num_iters=1000 # used to be 500
               )
           )}
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">
+          Part B.5 Bells & Whistles: Rotation invariance
+        </h2>
+        <p>
+          In Part B.3, we took patches axis-aligned with the image, o when the
+          image rotates, your patch (and descriptor) won’t align — hence not
+          rotation invariant. This section will add rotation invariance using
+          the orientation angles for each patch. To test this, let us rotate the
+          left image 180 degrees, so the two source images for the campus set
+          mosaic would look like below.
+        </p>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+          {campus_src_rot.map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={400} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
+
+        <p>
+          <span className="font-semibold">Step 1. Compute theta. </span>For each
+          Harris corner <InlineMath math={"(x, y)^T"} />, we compute a dominant
+          orientation <InlineMath math={"\\theta"} />. The image is first
+          smoothed with a Gaussian of scale{" "}
+          <InlineMath math={"\\sigma_o = 4.5"} />, then the gradients{" "}
+          <InlineMath math={"I_x, I_y"} /> are computed. The orientation is
+          given by <InlineMath math={"\\theta = \\arctan2(I_y, I_x)"} />,
+          aligning the feature descriptor with the local gradient direction for
+          rotation invariance. Below are the interst points with orientation,
+          using harris corner and ANMS.
+        </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
+          {rot.slice(0, 2).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={400} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
+        <p>
+          <span className="font-semibold">
+            Step 2. Get rotation-invariant descriptors.{" "}
+          </span>
+          For each interest point (x, y) with orientation θ, we rotate the
+          coordinate frame around that point by <InlineMath math={`–\\theta`} />
+          , before extracting the patch. So instead of taking a 40×40 window
+          aligned with the image axes like Part B.3, we take one aligned with
+          the keypoint’s dominant orientation. That way, no matter how the
+          object rotates in the image, the descriptor remains consistent.
+        </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
+          {rot.slice(2, 3).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={800} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
+        <p>
+          <span className="font-semibold">Step 3. Feature matching. </span>We
+          perform feature matching as usual, but because of the
+          orientation-invariant descriptors, we now see matching lines between
+          source interest points intersecting with each other. This means that
+          we are no longer only searching for matching features along the image
+          axes, but we are matching features invariant to image rotation.
+        </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
+          {rot.slice(3, 4).map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <Image src={img.path} alt={img.name} width={800} height={200} />
+              <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
+        <p>
+          <span className="font-semibold">Step 4. Compute mosaic. </span>Last
+          but not least, we compute our homography. It looks as expected,
+          proving that rotation of input images does not affect the homography
+          alignment due to the rotation-invariance approeach to feature
+          descriptors.
+        </p>
+        {rot.slice(4, 5).map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={800} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
       </section>
     </main>
   );
