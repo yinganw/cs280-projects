@@ -25,8 +25,14 @@ export default function Home() {
       id: "proj3",
       title: "Project 3:[Auto]Stitching Photo Mosaics",
       description:
-        " All about stitching together many photographs to create larger composite images",
+        "All about stitching together many photographs to create larger composite images",
       href: "/proj3",
+    },
+    {
+      id: "proj4",
+      title: "Project 4: Neural Radiance Field (NeRF)",
+      description: "Implementing NeRF from scratch!",
+      href: "/proj4",
     },
   ];
 
