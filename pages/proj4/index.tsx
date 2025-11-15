@@ -145,6 +145,17 @@ export default function Proj4() {
       name: "NeRF training progress visualized, Davis Dataset",
       path: "/media/proj4/part2/2.6/training_progress.png",
     },
+  ];
+
+  const davis_gif = [
+    {
+      name: "NeRF, Davis Dataset",
+      path: "/media/proj4/part2/2.6/davis_orbit_top.gif",
+    },
+    // {
+    //   name: "NeRF, Davis Dataset",
+    //   path: "/media/proj4/part2/2.6/davis_official_gen_spherical_side.mp4",
+    // },
 
     // TODO (yingan): add visualization of the rays and samples
   ];
@@ -517,7 +528,8 @@ K =
 num_iters = 1500
 batch_size = 10000
 N_samples = 64
-near, far = 2.0, 6.0`}{" "}
+near, far = 2.0, 6.0
+lr=5e-4`}{" "}
         </SyntaxHighlighter>
         {lego_nerf.map((img, idx) => (
           <div key={idx} className="flex flex-col items-center">
@@ -537,7 +549,8 @@ near, far = 2.0, 6.0`}{" "}
         </p>
         <p>
           This is a quick validation, using Lafufu training data for traning the
-          NeRF network, and the validation data for geneating this video below.{" "}
+          NeRF network after 3000 iterations, and the validation data for
+          geneating this video below.{" "}
         </p>
         {lafufu_nerf.map((img, idx) => (
           <div key={idx} className="flex flex-col items-center">
@@ -546,14 +559,35 @@ near, far = 2.0, 6.0`}{" "}
           </div>
         ))}
         {/* TODO generate PSNR plot */}
-
+        <p>
+          Below are the analysis for generating NeRF using my own Davis Dataset.
+        </p>
         <SyntaxHighlighter language="python">
           {`# training
 num_iters = 5000
 batch_size = 10000
 N_samples = 64
-near, far = 0.01, 0.5`}{" "}
+near, far = 0.02, 0.5
+lr=5e-4`}{" "}
         </SyntaxHighlighter>
+        <p>
+          Below is the visualization of the training progress, using an
+          arbitrary image from the dataset. As mentioned above, the later
+          iterations focus on refining local details, while the ealry iterations
+          get the rough sketches of the image pretty quickly.
+        </p>
+        {davis_nerf.slice(2, 3).map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={600} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
+        {davis_gif.map((img, idx) => (
+          <div key={idx} className="flex flex-col items-center">
+            <Image src={img.path} alt={img.name} width={400} height={200} />
+            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
+          </div>
+        ))}
         <p>
           I was able to achieve above 23.50 PSNR for the training dataset, and
           above 20 PSNR for the validation set.
@@ -574,22 +608,10 @@ near, far = 0.01, 0.5`}{" "}
           typical for NeRF, since most structural information is learned early
           and later iterations focus on subtle refinements.
         </p>
+
         {davis_nerf.slice(1, 2).map((img, idx) => (
           <div key={idx} className="flex flex-col items-center">
             <Image src={img.path} alt={img.name} width={400} height={200} />
-            <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
-          </div>
-        ))}
-
-        <p>
-          Below is the visualization of the training progress, using an
-          arbitrary image from the dataset. As mentioned above, the later
-          iterations focus on refining local details, while the ealry iterations
-          get the rough sketches of the image pretty quickly.
-        </p>
-        {davis_nerf.slice(2, 3).map((img, idx) => (
-          <div key={idx} className="flex flex-col items-center">
-            <Image src={img.path} alt={img.name} width={600} height={200} />
             <p className="mt-2 text-sm font-medium text-center">{img.name}</p>
           </div>
         ))}
