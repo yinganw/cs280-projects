@@ -4,16 +4,612 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { InlineMath, BlockMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import SyntaxHighlighter from "react-syntax-highlighter";
+import React from "react";
 
 export default function Proj5() {
-  const image_sets = [
+  const setup_imgs = [
     {
-      name: "Calibration image set",
-      path: "/media/proj4/0.1/calibration_set.png",
+      caption: "A 2D cartoon character.",
+      stage_1_path: "/media/proj5/part0/stage1_image_0.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_0.png",
     },
     {
-      name: "Object scan image set",
-      path: "/media/proj4/0.2/object_scan_set.png",
+      caption:
+        "2D animated, warm and inviting cartoon character in soft pastel colors, flat-vector style. Ethnically neutral, gender-neutral, wearing casual outdoorsy clothes with a backpack. One hand raised in a friendly wave, light gentle smile, relaxed and welcoming posture. Green hoodie, dark blue pants, brown boots, yellow backpack. Eyes looking forward naturally. clean smooth lines, minimal brush strokes, subtle shading, harmonious warm tones, cozy and playful feel, crisp edges, polished and simple, transparent background, full body, centered, game-ready style for animation sprites.",
+      stage_1_path: "/media/proj5/part0/stage1_image_1.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_1.png",
+    },
+    {
+      caption:
+        "High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-tone palette (steel, gunmetal, silver) with subtle emissive blue accents. Compact spherical body with symmetrical quad rotors, glowing energy core at the center. Sharp, precise edges and reflective surfaces. Industrial-futuristic aesthetic inspired by AAA game concept art. Dynamic but stable hover pose. Soft studio lighting, crisp shadows, photorealistic reflections. No background (transparent), clean polished finish, centered, full object, production-ready for robotics concept visualization.",
+      stage_1_path: "/media/proj5/part0/stage1_image_2.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_2.png",
+    },
+  ];
+  const setup_imgs_step_5 = [
+    {
+      caption: "A 2D cartoon character.",
+      stage_1_path: "/media/proj5/part0/stage1_image_0_step_5.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_0_step_5.png",
+    },
+    {
+      caption:
+        "2D animated, warm and inviting cartoon character in soft pastel colors, flat-vector style. Ethnically neutral, gender-neutral, wearing casual outdoorsy clothes with a backpack. One hand raised in a friendly wave, light gentle smile, relaxed and welcoming posture. Green hoodie, dark blue pants, brown boots, yellow backpack. Eyes looking forward naturally. clean smooth lines, minimal brush strokes, subtle shading, harmonious warm tones, cozy and playful feel, crisp edges, polished and simple, transparent background, full body, centered, game-ready style for animation sprites.",
+      stage_1_path: "/media/proj5/part0/stage1_image_1_step_5.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_1_step_5.png",
+    },
+    {
+      caption:
+        "High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-tone palette (steel, gunmetal, silver) with subtle emissive blue accents. Compact spherical body with symmetrical quad rotors, glowing energy core at the center. Sharp, precise edges and reflective surfaces. Industrial-futuristic aesthetic inspired by AAA game concept art. Dynamic but stable hover pose. Soft studio lighting, crisp shadows, photorealistic reflections. No background (transparent), clean polished finish, centered, full object, production-ready for robotics concept visualization.",
+      stage_1_path: "/media/proj5/part0/stage1_image_2_step_5.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_2_step_5.png",
+    },
+  ];
+
+  const setup_imgs_step_100 = [
+    {
+      caption: "A 2D cartoon character.",
+      stage_1_path: "/media/proj5/part0/stage1_image_0_step_100.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_0_step_100.png",
+    },
+    {
+      caption:
+        "2D animated, warm and inviting cartoon character in soft pastel colors, flat-vector style. Ethnically neutral, gender-neutral, wearing casual outdoorsy clothes with a backpack. One hand raised in a friendly wave, light gentle smile, relaxed and welcoming posture. Green hoodie, dark blue pants, brown boots, yellow backpack. Eyes looking forward naturally. clean smooth lines, minimal brush strokes, subtle shading, harmonious warm tones, cozy and playful feel, crisp edges, polished and simple, transparent background, full body, centered, game-ready style for animation sprites.",
+      stage_1_path: "/media/proj5/part0/stage1_image_1_step_100.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_1_step_100.png",
+    },
+    {
+      caption:
+        "High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-tone palette (steel, gunmetal, silver) with subtle emissive blue accents. Compact spherical body with symmetrical quad rotors, glowing energy core at the center. Sharp, precise edges and reflective surfaces. Industrial-futuristic aesthetic inspired by AAA game concept art. Dynamic but stable hover pose. Soft studio lighting, crisp shadows, photorealistic reflections. No background (transparent), clean polished finish, centered, full object, production-ready for robotics concept visualization.",
+      stage_1_path: "/media/proj5/part0/stage1_image_2_step_100.png",
+      stage_2_path: "/media/proj5/part0/stage2_image_2_step_100.png",
+    },
+  ];
+
+  const forward_imgs = [
+    {
+      name: "Berkeley Campanile",
+      path: "/media/proj5/1.1-3/campanile_resized.png",
+    },
+    {
+      name: "Noisy Campanile at t=250",
+      path: "/media/proj5/1.1-3/campanile_noise_250.png",
+    },
+    {
+      name: "Noisy Campanile at t=500",
+      path: "/media/proj5/1.1-3/campanile_noise_500.png",
+    },
+    {
+      name: "Noisy Campanile at t=750",
+      path: "/media/proj5/1.1-3/campanile_noise_750.png",
+    },
+  ];
+
+  const denoised_forward_imgs = [
+    {
+      name: "Gaussian Blur Denoising at t=250",
+      path: "/media/proj5/1.1-3/campanile_denoise_250.png",
+    },
+    {
+      name: "Gaussian Blur Denoising at t=500",
+      path: "/media/proj5/1.1-3/campanile_denoise_500.png",
+    },
+    {
+      name: "Gaussian Blur Denoising at t=750",
+      path: "/media/proj5/1.1-3/campanile_denoise_750.png",
+    },
+  ];
+
+  const one_step_denoised_forward_imgs = [
+    {
+      name: "One-Step Denoised Campanile at t=250",
+      path: "/media/proj5/1.1-3/campanile_one_step_denoise_250.png",
+    },
+    {
+      name: "One-Step Denoised Campanile at t=500",
+      path: "/media/proj5/1.1-3/campanile_one_step_denoise_500.png",
+    },
+    {
+      name: "One-Step Denoised Campanile at t=750",
+      path: "/media/proj5/1.1-3/campanile_one_step_denoise_750.png",
+    },
+  ];
+
+  const iterative_denoised_imgs = [
+    {
+      name: "Noisy Campanile at t=90",
+      path: "/media/proj5/1.4/noisy_campanile_t_90.png",
+    },
+    {
+      name: "Noisy Campanile at t=240",
+      path: "/media/proj5/1.4/noisy_campanile_t_240.png",
+    },
+    {
+      name: "Noisy Campanile at t=390",
+      path: "/media/proj5/1.4/noisy_campanile_t_390.png",
+    },
+    {
+      name: "Noisy Campanile at t=540",
+      path: "/media/proj5/1.4/noisy_campanile_t_540.png",
+    },
+    {
+      name: "Noisy Campanile at t=690",
+      path: "/media/proj5/1.4/noisy_campanile_t_690.png",
+    },
+    {
+      name: "Original",
+      path: "/media/proj5/1.4/campanile_original.png",
+    },
+    {
+      name: "Iteratively Denoised Campanile",
+      path: "/media/proj5/1.4/campanile_clean.png",
+    },
+    {
+      name: "One-Step Denoised Campanile",
+      path: "/media/proj5/1.4/campanile_one_step_clean.png",
+    },
+    {
+      name: "Gaussian Blurred Campanile",
+      path: "/media/proj5/1.4/campanile_blurred_clean.png",
+    },
+  ];
+
+  const diffusion_sampling_imgs = [
+    {
+      name: "Sample 1",
+      path: "/media/proj5/1.5/random_im_1.png",
+    },
+    {
+      name: "Sample 2",
+      path: "/media/proj5/1.5/random_im_2.png",
+    },
+    {
+      name: "Sample 3",
+      path: "/media/proj5/1.5/random_im_3.png",
+    },
+    {
+      name: "Sample 4",
+      path: "/media/proj5/1.5/random_im_4.png",
+    },
+    {
+      name: "Sample 5",
+      path: "/media/proj5/1.5/random_im_5.png",
+    },
+  ];
+
+  const cfg_sampling_imgs = [
+    {
+      name: "Sample 1 with CFG",
+      path: "/media/proj5/1.6/cfg_random_im_1.png",
+    },
+    {
+      name: "Sample 2 with CFG",
+      path: "/media/proj5/1.6/cfg_random_im_2.png",
+    },
+    {
+      name: "Sample 3 with CFG",
+      path: "/media/proj5/1.6/cfg_random_im_3.png",
+    },
+    {
+      name: "Sample 4 with CFG",
+      path: "/media/proj5/1.6/cfg_random_im_4.png",
+    },
+    {
+      name: "Sample 5 with CFG",
+      path: "/media/proj5/1.6/cfg_random_im_5.png",
+    },
+  ];
+
+  const sd_edit_campnile_imgs = [
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1.7/campanile_sdedit_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1.7/campanile_sdedit_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1.7/campanile_sdedit_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1.7/campanile_sdedit_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1.7/campanile_sdedit_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1.7/campanile_sdedit_20.png",
+    },
+  ];
+
+  const sd_edit_cake_imgs = [
+    {
+      name: "Original",
+      path: "/media/proj5/1.7/cake/cake.png",
+    },
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1.7/cake/cake_sdedit_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1.7/cake/cake_sdedit_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1.7/cake/cake_sdedit_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1.7/cake/cake_sdedit_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1.7/cake/cake_sdedit_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1.7/cake/cake_sdedit_20.png",
+    },
+  ];
+
+  const sd_edit_cocktail_imgs = [
+    {
+      name: "Original",
+      path: "/media/proj5/1.7/cocktail/cocktail.png",
+    },
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1.7/cocktail/cocktail_sdedit_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1.7/cocktail/cocktail_sdedit_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1.7/cocktail/cocktail_sdedit_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1.7/cocktail/cocktail_sdedit_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1.7/cocktail/cocktail_sdedit_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1.7/cocktail/cocktail_sdedit_20.png",
+    },
+  ];
+
+  const sd_edit_leaf_imgs = [
+    {
+      name: "Hand drawn leaf",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_hand_drawn.png",
+    },
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_sdedit_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_sdedit_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_sdedit_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_sdedit_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_sdedit_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1.7/leaf_drawn/leaf_sdedit_20.png",
+    },
+  ];
+
+  const sd_edit_santa_imgs = [
+    {
+      name: "Hand drawn santa",
+      path: "/media/proj5/1.7/santa_drawn/santa_hand_drawn.png",
+    },
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1.7/santa_drawn/santa_sdedit_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1.7/santa_drawn/santa_sdedit_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1.7/santa_drawn/santa_sdedit_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1.7/santa_drawn/santa_sdedit_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1.7/santa_drawn/santa_sdedit_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1.7/santa_drawn/santa_sdedit_20.png",
+    },
+  ];
+
+  const sd_edit_tree_imgs = [
+    {
+      name: "Web image: tree house",
+      path: "/media/proj5/1.7/treehouse/tree_house.jpeg",
+    },
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1.7/treehouse/tree_house_sdedit_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1.7/treehouse/tree_house_sdedit_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1.7/treehouse/tree_house_sdedit_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1.7/treehouse/tree_house_sdedit_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1.7/treehouse/tree_house_sdedit_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1.7/treehouse/tree_house_sdedit_20.png",
+    },
+  ];
+
+  const inpaint_campanile = [
+    {
+      name: "Original",
+      path: "/media/proj5/1.4/campanile_original.png",
+    },
+    {
+      name: "Mask",
+      path: "/media/proj5/1.7.2/1.7.2_mask.png",
+    },
+    {
+      name: "Hole to Fill",
+      path: "/media/proj5/1.7.2/1.7.2_to_replace.png",
+    },
+    {
+      name: "Campanile Inpainted",
+      path: "/media/proj5/1.7.2/campanile_inpaint.png",
+    },
+  ];
+
+  const inpaint_cake = [
+    {
+      name: "Original",
+      path: "/media/proj5/1.7.2/resized_cake.png",
+    },
+    {
+      name: "Mask",
+      path: "/media/proj5/1.7.2/cake_mask.png",
+    },
+    {
+      name: "Hole to Fill",
+      path: "/media/proj5/1.7.2/cake_to_replace.png",
+    },
+    {
+      name: "Campanile Inpainted",
+      path: "/media/proj5/1.7.2/cake_inpaint.png",
+    },
+  ];
+
+  const inpaint_cocktail = [
+    {
+      name: "Original",
+      path: "/media/proj5/1.7.2/resized_cocktail.png",
+    },
+    {
+      name: "Mask",
+      path: "/media/proj5/1.7.2/cocktail_mask.png",
+    },
+    {
+      name: "Hole to Fill",
+      path: "/media/proj5/1.7.2/cocktail_to_replace.png",
+    },
+    {
+      name: "Campanile Inpainted",
+      path: "/media/proj5/1.7.2/cocktail_inpaint.png",
+    },
+  ];
+
+  const campanile_characters = [
+    {
+      name: "2D animated character at noise level 1",
+      path: "/media/proj5/1.7.3/campanile_character/character_sdedit_1.png",
+    },
+    {
+      name: "2D animated character at noise level 3",
+      path: "/media/proj5/1.7.3/campanile_character/character_sdedit_3.png",
+    },
+    {
+      name: "2D animated character at noise level 5",
+      path: "/media/proj5/1.7.3/campanile_character/character_sdedit_5.png",
+    },
+    {
+      name: "2D animated character at noise level 7",
+      path: "/media/proj5/1.7.3/campanile_character/character_sdedit_7.png",
+    },
+    {
+      name: "2D animated character at noise level 10",
+      path: "/media/proj5/1.7.3/campanile_character/character_sdedit_10.png",
+    },
+    {
+      name: "2D animated character at noise level 20",
+      path: "/media/proj5/1.7.3/campanile_character/character_sdedit_20.png",
+    },
+  ];
+
+  const cake_characters = [
+    {
+      name: "2D animated character at noise level 1",
+      path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_1.png",
+    },
+    {
+      name: "2D animated character at noise level 3",
+      path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_3.png",
+    },
+    {
+      name: "2D animated character at noise level 5",
+      path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_5.png",
+    },
+    {
+      name: "2D animated character at noise level 7",
+      path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_7.png",
+    },
+    {
+      name: "2D animated character at noise level 10",
+      path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_10.png",
+    },
+    {
+      name: "2D animated character at noise level 20",
+      path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_20.png",
+    },
+  ];
+  const cocktail_drones = [
+    {
+      name: "Drone at noise level 1",
+      path: "/media/proj5/1.7.3/cocktail_drone/drone_cake_sdedit_1.png",
+    },
+    {
+      name: "Drone at noise level 3",
+      path: "/media/proj5/1.7.3/cocktail_drone/drone_cake_sdedit_3.png",
+    },
+    {
+      name: "Drone at noise level 5",
+      path: "/media/proj5/1.7.3/cocktail_drone/drone_cake_sdedit_5.png",
+    },
+    {
+      name: "Drone at noise level 7",
+      path: "/media/proj5/1.7.3/cocktail_drone/drone_cake_sdedit_7.png",
+    },
+    {
+      name: "Drone at noise level 10",
+      path: "/media/proj5/1.7.3/cocktail_drone/drone_cake_sdedit_10.png",
+    },
+    {
+      name: "Drone at noise level 20",
+      path: "/media/proj5/1.7.3/cocktail_drone/drone_cake_sdedit_20.png",
+    },
+  ];
+
+  const anagram_old_man = [
+    {
+      name: "An Oil Painting of an Old Man",
+      path: "/media/proj5/1.8/old_man.png",
+    },
+    {
+      name: "An Oil Painting of People around a Campfire",
+      path: "/media/proj5/1.8/old_man_flipped.png",
+    },
+  ];
+
+  const anagram_queen = [
+    {
+      name: "A portrait of a queen",
+      path: "/media/proj5/1.8/queen.png",
+    },
+    {
+      name: "A painting of a christmas tree",
+      path: "/media/proj5/1.8/christmas_tree.png",
+    },
+  ];
+
+  const hybrid_imgs = [
+    {
+      name: "Hybrid image of a house plant and the statue of liberty",
+      path: "/media/proj5/1.9/plant_statue.png",
+      prompt1: "a watercolor painting of the statue of liberty",
+      prompt2: "a watercolor painting of a house plant",
+    },
+    {
+      name: "Hybrid image of a polar bear and a dining table",
+      path: "/media/proj5/1.9/bear_table.png",
+      prompt1: "an oil painting of a polar bear",
+      prompt2: "a oil painting of a dining table",
+    },
+  ];
+
+  const negative_anagrams = [
+    {
+      name: "a lithograph of a teddy bear",
+      path: "/media/proj5/1b&w/negative/bear.png",
+    },
+    {
+      name: "a lithograph of a rabbit",
+      path: "/media/proj5/1b&w/negative/rabbit.png",
+    },
+  ];
+
+  const skewed_anagrams = [
+    {
+      name: "a watercolor painting of the statue of liberty",
+      path: "/media/proj5/1b&w/skewed/statue.png",
+    },
+    {
+      name: "a watercolor painting of a house plant",
+      path: "/media/proj5/1b&w/skewed/plant.png",
+    },
+  ];
+
+  const course_logo = [
+    {
+      name: "Oski",
+      path: "/media/proj5/1b&w/logo/oski.png",
+    },
+    {
+      name: "SDEdit with i_start=1",
+      path: "/media/proj5/1b&w/logo/logo_1.png",
+    },
+    {
+      name: "SDEdit with i_start=3",
+      path: "/media/proj5/1b&w/logo/logo_3.png",
+    },
+    {
+      name: "SDEdit with i_start=5",
+      path: "/media/proj5/1b&w/logo/logo_5.png",
+    },
+    {
+      name: "SDEdit with i_start=7",
+      path: "/media/proj5/1b&w/logo/logo_7.png",
+    },
+    {
+      name: "SDEdit with i_start=10",
+      path: "/media/proj5/1b&w/logo/logo_10.png",
+    },
+    {
+      name: "SDEdit with i_start=20",
+      path: "/media/proj5/1b&w/logo/logo_20.png",
+    },
+    {
+      name: "Best course logo (SDEdit = 10)",
+      path: "/media/proj5/1b&w/logo/logo_10_256.png",
     },
   ];
 
@@ -33,54 +629,640 @@ export default function Proj5() {
       <h2 className="text-xl font-semibold">
         Part A: The Power of Diffusion Models!
       </h2>
-      <h2 className="text-xl font-semibold">Part 0: Setup</h2>
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Part 0: Setup</h2>
+        <p>
+          I decided to come up with three pairs (six in total) of prompts, each
+          describing one object. Within each pair, I use one short prompt that
+          is very concise, and one longer prompt that goes into details on the
+          object. Below are the prompts I used:
+        </p>
+        <SyntaxHighlighter language="text">
+          {`A cat riding a motorcycle.
+
+Dreamlike surrealist painting style. A cat with translucent pastel tentacles and riding a motorcycle. Blended gradients, ethereal glow, painterly brush textures. Transparent background, centered.
+
+A 2D cartoon character.
+
+2D animated, warm and inviting cartoon character in soft pastel colors, flat-vector style. Ethnically neutral, gender-neutral, wearing casual outdoorsy clothes with a backpack. One hand raised in a friendly wave, light gentle smile, relaxed and welcoming posture. Green hoodie, dark blue pants, brown boots, yellow backpack. Eyes looking forward naturally. Clean smooth lines, minimal brush strokes, subtle shading, harmonious warm tones, cozy and playful feel, crisp edges, polished and simple, transparent background, full body, centered, game-ready style for animation sprites.
+
+A sci-fi drone.
+
+High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-tone palette (steel, gunmetal, silver) with subtle emissive blue accents. Compact spherical body with symmetrical quad rotors, glowing energy core at the center. Sharp, precise edges and reflective surfaces. Industrial-futuristic aesthetic inspired by AAA game concept art. Dynamic but stable hover pose. Soft studio lighting, crisp shadows, photorealistic reflections. No background (transparent), clean polished finish, centered, full object, production-ready for robotics concept visualization.
+`}{" "}
+        </SyntaxHighlighter>
+        <p>
+          With seed = 100 and num_inference_steps = 20, I picked three prompts
+          and generated images using the DeepFloyd model.
+        </p>
+        <div className="grid grid-cols-3 gap-4">
+          {setup_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.stage_1_path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                stage 1: {img.caption}
+              </p>
+              <div
+                className="absolute bottom-full mb-2 hidden group-hover:block
+                     max-w-xs p-2 text-sm text-white bg-black/80
+                     rounded-md shadow-lg"
+              >
+                {img.caption}
+              </div>
+            </div>
+          ))}
+          {setup_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.stage_2_path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                stage 2: {img.caption}
+              </p>
+              <div
+                className="absolute bottom-full mb-2 hidden group-hover:block
+                     max-w-xs p-2 text-sm text-white bg-black/80
+                     rounded-md shadow-lg"
+              >
+                {img.caption}
+              </div>
+            </div>
+          ))}
+        </div>
+        <p>
+          The examples above were generated with{" "}
+          <code>num_inference_steps = 20</code>. I also experimented with{" "}
+          <code>num_inference_steps = 5</code> and <code>100</code>. Below are
+          the results for <code>num_inference_steps = 5</code>. Compared to{" "}
+          <code>num_inference_steps = 20</code>, the generated images appear
+          rougher and less refined. While they still follow the prompts, the
+          backgrounds exhibit more noise and artifacts, indicating that fewer
+          inference steps reduce the quality of the final output.
+        </p>
+        <div className="grid grid-cols-3 gap-4">
+          {setup_imgs_step_5.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.stage_1_path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                stage 1: {img.caption}
+              </p>
+              <div
+                className="absolute bottom-full mb-2 hidden group-hover:block
+                     max-w-xs p-2 text-sm text-white bg-black/80
+                     rounded-md shadow-lg"
+              >
+                {img.caption}
+              </div>
+            </div>
+          ))}
+          {setup_imgs_step_5.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.stage_2_path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                stage 2: {img.caption}
+              </p>
+              <div
+                className="absolute bottom-full mb-2 hidden group-hover:block
+                     max-w-xs p-2 text-sm text-white bg-black/80
+                     rounded-md shadow-lg"
+              >
+                {img.caption}
+              </div>
+            </div>
+          ))}
+        </div>
+        <p>
+          For <code>num_inference_steps = 100</code>, the generation process
+          took significantly longer than the previous examples. The images
+          produced are noticeably more refined and highly detailed. In the drone
+          image, for example, we can even observe the reflection of the drone on
+          the table, demonstrating the improved realism and fidelity achieved
+          with more inference steps.
+        </p>
+        <div className="grid grid-cols-3 gap-4">
+          {setup_imgs_step_100.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.stage_1_path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                stage 1: {img.caption}
+              </p>
+              <div
+                className="absolute bottom-full mb-2 hidden group-hover:block
+                     max-w-xs p-2 text-sm text-white bg-black/80
+                     rounded-md shadow-lg"
+              >
+                {img.caption}
+              </div>
+            </div>
+          ))}
+          {setup_imgs_step_100.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.stage_2_path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                stage 2: {img.caption}
+              </p>
+              <div
+                className="absolute bottom-full mb-2 hidden group-hover:block
+                     max-w-xs p-2 text-sm text-white bg-black/80
+                     rounded-md shadow-lg"
+              >
+                {img.caption}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <h2 className="text-xl font-semibold">Part 1: Sampling Loops</h2>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           1.1 Implementing the Forward Process
         </h2>
+        <div className="grid grid-cols-4 gap-4">
+          {forward_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.2 Classical Denoising</h2>
+        <div className="grid grid-cols-3 gap-4">
+          {forward_imgs.slice(1, 4).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {denoised_forward_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.3 One-Step Denoising</h2>
+        <div className="grid grid-cols-3 gap-4">
+          {denoised_forward_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {one_step_denoised_forward_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.4 Iterative Denoising</h2>
+        <div className="grid grid-cols-5 gap-4">
+          {iterative_denoised_imgs.slice(0, 5).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          {iterative_denoised_imgs.slice(5).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.5 Diffusion Model Sampling</h2>
+        <div className="grid grid-cols-5 gap-4">
+          {diffusion_sampling_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           1.6 Classifier-Free Guidance (CFG)
         </h2>
+        <div className="grid grid-cols-5 gap-4">
+          {cfg_sampling_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           1.7 Image-to-image Translation
         </h2>
+        <div className="grid grid-cols-6 gap-4">
+          {sd_edit_campnile_imgs.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {sd_edit_cake_imgs
+            .slice(0, 1)
+            .concat(sd_edit_cocktail_imgs.slice(0, 1))
+            .map((img, idx) => (
+              <div
+                key={idx}
+                className="relative flex flex-col items-center group"
+              >
+                <Image src={img.path} alt="" width={200} height={200} />
+                <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                  {img.name}
+                </p>
+              </div>
+            ))}
+        </div>
+        <div className="grid grid-cols-6 gap-4">
+          {sd_edit_cake_imgs.slice(1).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-6 gap-4">
+          {sd_edit_cocktail_imgs.slice(1).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-xl font-semibold">
           1.7.1 Editing Hand-Drawn and Web Images
         </h2>
+
+        {sd_edit_leaf_imgs.slice(0, 1).map((img, idx) => (
+          <div key={idx} className="relative flex flex-col items-center group">
+            <Image src={img.path} alt="" width={200} height={200} />
+            <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+              {img.name}
+            </p>
+          </div>
+        ))}
+
+        <div className="grid grid-cols-6 gap-4">
+          {sd_edit_leaf_imgs.slice(1).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        {sd_edit_santa_imgs.slice(0, 1).map((img, idx) => (
+          <div key={idx} className="relative flex flex-col items-center group">
+            <Image src={img.path} alt="" width={200} height={200} />
+            <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+              {img.name}
+            </p>
+          </div>
+        ))}
+        <div className="grid grid-cols-6 gap-4">
+          {sd_edit_santa_imgs.slice(1).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        {sd_edit_tree_imgs.slice(0, 1).map((img, idx) => (
+          <div key={idx} className="relative flex flex-col items-center group">
+            <Image src={img.path} alt="" width={200} height={200} />
+            <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+              {img.name}
+            </p>
+          </div>
+        ))}
+        <div className="grid grid-cols-6 gap-4">
+          {sd_edit_tree_imgs.slice(1).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
         <h2 className="text-xl font-semibold">1.7.2 Inpainting</h2>
+        <div className="grid grid-cols-4 gap-4">
+          {inpaint_campanile.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          {inpaint_cake.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          {inpaint_cocktail.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-xl font-semibold">
           1.7.3 Text-Conditional Image-to-image Translation{" "}
         </h2>
+        <div className="grid grid-cols-6 gap-4">
+          {campanile_characters.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-6 gap-4">
+          {cake_characters.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-6 gap-4">
+          {cocktail_drones.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.8 Visual Anagrams</h2>
+        <div className="grid grid-cols-2 gap-4">
+          {anagram_old_man.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {anagram_queen.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.9 Hybrid Images</h2>
+
+        <div className="grid grid-cols-1 gap-6">
+          {hybrid_imgs.map((img, idx) => (
+            <div key={idx} className="flex flex-col items-center">
+              <div className="grid grid-cols-2 gap-6 items-center">
+                <div className="flex flex-col items-center">
+                  <Image src={img.path} alt="" width={260} height={260} />
+                  <p className="mt-1 text-sm font-medium text-center">
+                    Close up: {img.prompt2}
+                  </p>
+                </div>
+
+                {/* Far away */}
+                <div className="flex flex-col items-center">
+                  <Image src={img.path} alt="" width={64} height={64} />
+                  <p className="mt-1 text-sm font-medium text-center">
+                    Far away: {img.prompt1}
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-3 text-sm font-medium text-center">{img.name}</p>
+            </div>
+          ))}
+        </div>
       </section>
       <h2 className="text-xl font-semibold">Part 2: Bells & Whistles</h2>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">More visual anagrams!</h2>
+        <h3 className="text-large font-semibold">Negative anagram</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {negative_anagrams.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
+        <h3 className="text-large font-semibold">Skewed anagram</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {skewed_anagrams.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Design a course logo!</h2>
+
+        <div className="grid grid-cols-7 gap-4">
+          {course_logo.slice(0, 7).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+          <p className="col-span-7 mt-4 text-sm text-center">
+            Prompt: a 2D animated University of California at Berkeley&apos;s
+            bear Oski holding a camera
+          </p>
+        </div>
+        <div>
+          {course_logo.slice(7).map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex flex-col items-center group"
+            >
+              <Image src={img.path} alt="" width={200} height={200} />
+              <p className="mt-2 text-sm font-medium text-center line-clamp-2 cursor-pointer">
+                {img.name}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <h2 className="text-xl font-semibold">
