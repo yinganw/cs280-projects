@@ -34,6 +34,13 @@ export default function Home() {
       description: "Implementing NeRF from scratch!",
       href: "/proj4",
     },
+    {
+      id: "proj5",
+      title: "Project 5: Fun With Diffusion Models!",
+      description:
+        "Implementing and deploying diffusion models for image generation",
+      href: "/proj5",
+    },
   ];
 
   return (
