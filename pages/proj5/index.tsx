@@ -441,54 +441,54 @@ export default function Proj5() {
 
   const campanile_characters = [
     {
-      name: "2D animated character at noise level 1",
+      name: "2D character at noise level 1",
       path: "/media/proj5/1.7.3/campanile_character/character_sdedit_1.png",
     },
     {
-      name: "2D animated character at noise level 3",
+      name: "2D character at noise level 3",
       path: "/media/proj5/1.7.3/campanile_character/character_sdedit_3.png",
     },
     {
-      name: "2D animated character at noise level 5",
+      name: "2D character at noise level 5",
       path: "/media/proj5/1.7.3/campanile_character/character_sdedit_5.png",
     },
     {
-      name: "2D animated character at noise level 7",
+      name: "2D character at noise level 7",
       path: "/media/proj5/1.7.3/campanile_character/character_sdedit_7.png",
     },
     {
-      name: "2D animated character at noise level 10",
+      name: "2D character at noise level 10",
       path: "/media/proj5/1.7.3/campanile_character/character_sdedit_10.png",
     },
     {
-      name: "2D animated character at noise level 20",
+      name: "2D character at noise level 20",
       path: "/media/proj5/1.7.3/campanile_character/character_sdedit_20.png",
     },
   ];
 
   const cake_characters = [
     {
-      name: "2D animated character at noise level 1",
+      name: "2D character at noise level 1",
       path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_1.png",
     },
     {
-      name: "2D animated character at noise level 3",
+      name: "2D character at noise level 3",
       path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_3.png",
     },
     {
-      name: "2D animated character at noise level 5",
+      name: "2D character at noise level 5",
       path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_5.png",
     },
     {
-      name: "2D animated character at noise level 7",
+      name: "2D character at noise level 7",
       path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_7.png",
     },
     {
-      name: "2D animated character at noise level 10",
+      name: "2D character at noise level 10",
       path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_10.png",
     },
     {
-      name: "2D animated character at noise level 20",
+      name: "2D character at noise level 20",
       path: "/media/proj5/1.7.3/cake_character/character_cocktail_sdedit_20.png",
     },
   ];
@@ -794,6 +794,36 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
         <h2 className="text-xl font-semibold">
           1.1 Implementing the Forward Process
         </h2>
+        <p>
+          A key part of diffusion is the forward process, which takes a clean
+          image <InlineMath math={`x_0`} />
+          and adds noise to it. The forward process is defined by:{" "}
+        </p>
+
+        <BlockMath
+          math={String.raw`
+q(x_t | x_0) = N(x_t ; \sqrt{\bar\alpha_t} x_0, (1 - \bar\alpha_t)\mathbf{I})\tag{1}`}
+        />
+
+        <p>which is equivalent to computing </p>
+        <BlockMath
+          math={String.raw`
+x_t = \sqrt{\bar\alpha_t} x_0 + \sqrt{1 - \bar\alpha_t} \epsilon \quad \text{where}~ \epsilon \sim N(0, 1) \tag{2} 
+`}
+        />
+
+        <p>
+          That is, given a clean image <InlineMath math={`x_0`} />, we get a
+          noisy image <InlineMath math={`x_t`} /> at timestep{" "}
+          <InlineMath math={`t`} /> by sampling from a Gaussian with mean{" "}
+          <InlineMath math={`\\sqrt{\\bar{\\alpha}_t}x_0`} /> and variance{" "}
+          <InlineMath math={`1 - \\bar{\\alpha}_t`} />.
+        </p>
+        <p>
+          Using the Berkeley Campanile image and the forward function, below are
+          the Campanile at noise level [250, 500, 750]. We observe an increasing
+          amount of noise pixels in the images as noise level goes up.
+        </p>
         <div className="grid grid-cols-4 gap-4">
           {forward_imgs.map((img, idx) => (
             <div
@@ -810,6 +840,12 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.2 Classical Denoising</h2>
+        <p>
+          Here, we are using Gaussina blur filtering to try to remove the noise
+          from the noisy images generated above. We observe that the noisy
+          images are blurry, but the Guassian does not successfully remove the
+          noise here.
+        </p>
         <div className="grid grid-cols-3 gap-4">
           {forward_imgs.slice(1, 4).map((img, idx) => (
             <div
@@ -839,6 +875,39 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.3 One-Step Denoising</h2>
+        <p>
+          Now, we use a pretrained diffusion model <code>stage_1.unet</code> to
+          denoise, by recovering Gaussian noise from the image and removing this
+          noise to recover the original image.
+        </p>
+        <p>
+          First, we use the <code>forward()</code> function to add noise to the
+          original image. Then, we estimate the noise in the new noisy image by
+          passing it through the diffusion model <code>stage_1.unet</code>. This
+          noise is the <InlineMath math={`\\epsilon`} /> we have from formula 2.
+        </p>
+        <p>Given the forward formula: </p>
+        <BlockMath
+          math={String.raw`
+x_t = \sqrt{\bar\alpha_t} x_0 + \sqrt{1 - \bar\alpha_t} \epsilon \quad \text{where}~ \epsilon \sim N(0, 1) 
+`}
+        />
+        <p>
+          we deduct the formula for <InlineMath math={`x_0`} />:
+        </p>
+        <BlockMath
+          math={String.raw`
+x_0 =
+\frac{1}{\sqrt{\bar{\alpha}_t}}
+\left(
+x_t - \sqrt{1 - \bar{\alpha}_t}\, \epsilon
+\right)
+`}
+        />
+        <p>
+          Using this equation above, we can now obtain an estimate of the
+          original image, from noisy images at noise level t = [250, 500, 750].
+        </p>
         <div className="grid grid-cols-3 gap-4">
           {denoised_forward_imgs.map((img, idx) => (
             <div
@@ -865,9 +934,32 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          From the visualizations above, we see that the one-step denoising
+          using a pretrained UNet performs much better than a simple Gaussian
+          blur. The one-step denoised image at t = 250 is approximately the same
+          as the original image, while t = 500 and 750 have worse recovery
+          results. This shows that as the noise increases, this approach becomes
+          less effective.
+        </p>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.4 Iterative Denoising</h2>
+        <p>
+          We can denoise iteratively like diffusion models, to effectively
+          project the image onto the natural image manifold. We follow the
+          formula:
+        </p>
+        <BlockMath
+          math={String.raw`
+ x_{t'} = \frac{\sqrt{\bar\alpha_{t'}}\beta_t}{1 - \bar\alpha_t} x_0 + \frac{\sqrt{\alpha_t}(1 - \bar\alpha_{t'})}{1 - \bar\alpha_t} x_t + v_\sigma
+`}
+        />
+        <p>
+          Below are the noisy Campanile image every 5th loop of denoising. We
+          observe that the images gradually become less noisy as the timestep
+          goes down.
+        </p>
         <div className="grid grid-cols-5 gap-4">
           {iterative_denoised_imgs.slice(0, 5).map((img, idx) => (
             <div
@@ -881,6 +973,13 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          Here are the visualizations of the iteratively denoised Campanile,
+          comparing to the one-step denoising and Gaussian blurring methods from
+          previous sections. We see that the iterative apporach produces an
+          estimation of the original image with much more details than the
+          one-step one.{" "}
+        </p>
         <div className="grid grid-cols-4 gap-4">
           {iterative_denoised_imgs.slice(5).map((img, idx) => (
             <div
@@ -897,6 +996,12 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.5 Diffusion Model Sampling</h2>
+        <p>
+          Aside from denoising image, we can also use the iterative denoising
+          approach to generate images from scratch. Using the prompt{" "}
+          <code>&quot;a high quality photo&quot;</code>, I sampled 5 images from{" "}
+          <code>i_start = 0</code>.
+        </p>
         <div className="grid grid-cols-5 gap-4">
           {diffusion_sampling_imgs.map((img, idx) => (
             <div
@@ -910,11 +1015,31 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          Some of the generated images above have clear objects or figures,
+          while sample 2 is non-sensical.
+        </p>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           1.6 Classifier-Free Guidance (CFG)
         </h2>
+        <p>
+          To improve image quality, we can use Classifer-Free Guidance (CFG). In
+          CFG, we compute both a noise estimate conditioned on a text prompt,
+          and an unconditional noise estimate. We denote these{" "}
+          <InlineMath math={`\\epsilon_c`} /> and
+          <InlineMath math={`\\epsilon_u`} />. Then, we let our new noise
+          estimate be:
+        </p>
+        <BlockMath
+          math={String.raw`
+\epsilon = \epsilon_u + \gamma (\epsilon_c - \epsilon_u) `}
+        />
+        <p>
+          With a CFG scale of <InlineMath math={`\\gamma = 7`} />, I generated 5
+          images below:{" "}
+        </p>
         <div className="grid grid-cols-5 gap-4">
           {cfg_sampling_imgs.map((img, idx) => (
             <div
@@ -928,11 +1053,28 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          We observe that the quality of the generated images are way better
+          than the non-CFG approach, with refined details. However, the
+          diversity of the generated objects is limited, to compensate for the
+          image quality. All the generated images have human figures in them.
+        </p>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           1.7 Image-to-image Translation
         </h2>
+        <p>
+          Following the SDEdit algorithm, we can force a noisy image back onto
+          the manifold of natural images by adding noise to a real image and
+          then running the reverse diffusion process without conditioning. The
+          amount of noise injected determines how much of the original structure
+          is destroyed: starting denoising from earlier timesteps (lower{" "}
+          <code>i_start</code>) results in stronger hallucination and larger
+          edits, while starting from later timesteps preserves more of the
+          original image and produces more faithful reconstructions. Below is a
+          list of denoised images using the Berkeley Campanile.
+        </p>
         <div className="grid grid-cols-6 gap-4">
           {sd_edit_campnile_imgs.map((img, idx) => (
             <div
@@ -946,6 +1088,11 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          Here are two test images of my own, one with two slices of cakes in
+          it, another taken at a cocktail bar. I denoised these images following
+          the same procedure.
+        </p>
         <div className="grid grid-cols-2 gap-4">
           {sd_edit_cake_imgs
             .slice(0, 1)
@@ -975,6 +1122,7 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+
         <div className="grid grid-cols-6 gap-4">
           {sd_edit_cocktail_imgs.slice(1).map((img, idx) => (
             <div
@@ -988,10 +1136,21 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          We observe from both test images that the recovery process
+          hallucinates severely until <code>i_start = 20</code>. This shows
+          again that we are essentially just creating images that are similar to
+          the original image, with a low-enough noise level.
+        </p>
 
         <h2 className="text-xl font-semibold">
           1.7.1 Editing Hand-Drawn and Web Images
         </h2>
+        <p>
+          I then tried using nonrealistic images. Below are two hand-drawn
+          images I created, and we denoised for noise levels [1, 3, 5, 7, 10,
+          20].
+        </p>
 
         {sd_edit_leaf_imgs.slice(0, 1).map((img, idx) => (
           <div key={idx} className="relative flex flex-col items-center group">
@@ -1036,6 +1195,17 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          At lower <code>i_start</code> values (SDEdit = [1, 3, 5]), a higher
+          level of noise is added to the input image, which destroys much of the
+          original structure. As a result, the denoising process produces more
+          creative and heavily hallucinated outputs that are often less related
+          to the original hand-drawn images. As the noise level decreases at
+          larger
+          <code>i_start</code> values (e.g., 10 and 20), more structural
+          information is preserved, and the generated images more closely match
+          the style and content of the original hand-drawn inputs.
+        </p>
         {sd_edit_tree_imgs.slice(0, 1).map((img, idx) => (
           <div key={idx} className="relative flex flex-col items-center group">
             <Image src={img.path} alt="" width={200} height={200} />
@@ -1044,6 +1214,11 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </p>
           </div>
         ))}
+        <p>
+          I also used an image online to test the procedure out. We observe the
+          same pattern that the less noisy the image is, more similar the
+          denoised image is to the source image.
+        </p>
         <div className="grid grid-cols-6 gap-4">
           {sd_edit_tree_imgs.slice(1).map((img, idx) => (
             <div
@@ -1058,6 +1233,11 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
           ))}
         </div>
         <h2 className="text-xl font-semibold">1.7.2 Inpainting</h2>
+        <p>
+          We can use the same iterative denoise CFG approach to implement
+          inpainting, so we only edit the image part where the mask value is 1.
+          Below is an example of inpainting using the Campanile.
+        </p>
         <div className="grid grid-cols-4 gap-4">
           {inpaint_campanile.map((img, idx) => (
             <div
@@ -1071,6 +1251,15 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          I then created binary masks for two of my own test images, carving out
+          a chocolate cake and a cocktail glass. During the denoising process,
+          the masked regions are filled in with new content inferred by the
+          model. As a result, the chocolate cake is replaced by a mango cake
+          with icing, and the cocktail glass is replaced with a different glass
+          top, demonstrating how the model can plausibly hallucinate objects
+          within specified masked areas.
+        </p>
         <div className="grid grid-cols-4 gap-4">
           {inpaint_cake.map((img, idx) => (
             <div
@@ -1101,6 +1290,12 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
         <h2 className="text-xl font-semibold">
           1.7.3 Text-Conditional Image-to-image Translation{" "}
         </h2>
+        <p>
+          We can also guide the projection of SDEdit with a text prompt. Using
+          the Campanile image and a text prompt{" "}
+          <code>A 2D cartoon character</code>, I created image-to-image
+          tranlation at noise level [1, 3, 5, 7, 10, 20].
+        </p>
         <div className="grid grid-cols-6 gap-4">
           {campanile_characters.map((img, idx) => (
             <div
@@ -1114,6 +1309,14 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+
+        <p>
+          Using the prompt below, I was able to transform the image of the
+          cocktail bar to an image with a 2D cartoon character in the bar.
+        </p>
+        <SyntaxHighlighter language="text">
+          {`prompt = 2D animated, warm and inviting cartoon character in soft pastel colors, flat-vector style. Ethnically neutral, gender-neutral, wearing casual outdoorsy clothes with a backpack. One hand raised in a friendly wave, light gentle smile, relaxed and welcoming posture. Green hoodie, dark blue pants, brown boots, yellow backpack. Eyes looking forward naturally. clean smooth lines, minimal brush strokes, subtle shading, harmonious warm tones, cozy and playful feel, crisp edges, polished and simple, transparent background, full body, centered, game-ready style for animation sprites.`}{" "}
+        </SyntaxHighlighter>
         <div className="grid grid-cols-6 gap-4">
           {cake_characters.map((img, idx) => (
             <div
@@ -1127,6 +1330,13 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          Using the prompt below, I also transformed the image of cakes to an
+          image with a slice of cake and a fancy drone.
+        </p>
+        <SyntaxHighlighter language="text">
+          {`prompt = High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-tone palette (steel, gunmetal, silver) with subtle emissive blue accents. Compact spherical body with symmetrical quad rotors, glowing energy core at the center. Sharp, precise edges and reflective surfaces. Industrial-futuristic aesthetic inspired by AAA game concept art. Dynamic but stable hover pose. Soft studio lighting, crisp shadows, photorealistic reflections. No background (transparent), clean polished finish, centered, full object, production-ready for robotics concept visualization.`}{" "}
+        </SyntaxHighlighter>
         <div className="grid grid-cols-6 gap-4">
           {cocktail_drones.map((img, idx) => (
             <div
@@ -1140,9 +1350,34 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>
+          We observe that the original image and the text prompt begin to
+          visually merge at higher noise levels (around{" "}
+          <code>i_start = 10</code> and <code>20</code>), because at lower noise
+          levels the masked SDEdit images retain too much of the original
+          structure, limiting the model’s ability to integrate the new prompt.
+        </p>
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.8 Visual Anagrams</h2>
+        <p>
+          I created two paris of visual anagrams with diffuson models. To do
+          this, we will denoise an image <InlineMath math={`x_t`} /> at step{" "}
+          <InlineMath math={`t`} /> normally with the prompt{" "}
+          <InlineMath math={`p_1`} />, to obtain noise estimate{" "}
+          <InlineMath math={`\\epsilon_1`} />. But at the same time, we will
+          flip <InlineMath math={`x_t`} /> upside down, and denoise with the
+          prompt
+          <InlineMath math={`p_2`} />, to get noise estimate{" "}
+          <InlineMath math={`\\epsilon_2`} />. We can flip{" "}
+          <InlineMath math={`\\epsilon_2`} />
+          back, and average the two noise estimates. We can then perform a
+          reverse diffusion step with the averaged noise estimate.
+        </p>
+        <p>
+          I started with the example prompt pairs, and created a flipped visual
+          anagram pair of an old man and people around a camp fire.
+        </p>
         <div className="grid grid-cols-2 gap-4">
           {anagram_old_man.map((img, idx) => (
             <div
@@ -1156,6 +1391,8 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             </div>
           ))}
         </div>
+        <p>I also created another pair with a queen and a christmas tree.</p>
+
         <div className="grid grid-cols-2 gap-4">
           {anagram_queen.map((img, idx) => (
             <div
@@ -1172,6 +1409,17 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">1.9 Hybrid Images</h2>
+        <p>
+          We can create ahybrid images by creating a composite noise estimate,
+          with two different text prompts. We combine low frequencies from one
+          noise estimate with high frequencies of the other. It achives similar
+          effects as hybrid images from Project 2, where the zoomed in and out
+          versions of the images are different.
+        </p>
+        <p>
+          Below are the two hybrid images I created, by combinig a house plant
+          with the Statue of Liberty, and a polar bear with a dining table.
+        </p>
 
         <div className="grid grid-cols-1 gap-6">
           {hybrid_imgs.map((img, idx) => (
@@ -1201,7 +1449,20 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
       <h2 className="text-xl font-semibold">Part 2: Bells & Whistles</h2>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">More visual anagrams!</h2>
+        <p>
+          We can also create more transformations for visual anagrams than just
+          flipping it upside down.
+        </p>
         <h3 className="text-large font-semibold">Negative anagram</h3>
+        <p>
+          Compared to the flipped visual illusion, negative visual anagrams work
+          by performing pixel-wise negation of the image. To compute the
+          composite noise, I get the noise for the bright image and the dark
+          image, as the dark image is just negativing every pixel in the bright
+          image. Then I sum the absolute value of both noise to get the
+          composite noise estimate. I then follow the same steps as the flipped
+          image generation process, to get the final visual results.
+        </p>
         <div className="grid grid-cols-2 gap-4">
           {negative_anagrams.map((img, idx) => (
             <div
@@ -1216,6 +1477,14 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
           ))}
         </div>
         <h3 className="text-large font-semibold">Skewed anagram</h3>
+        <p>
+          To create skewed visual anagrams, we follow the same process as the
+          other visual anagrams. We also invert the permuted (skewed) view’s
+          noise before averaging it with the original view. I manipulated the
+          image by applying column-wise shifts, to roll parts of the image
+          horizontally. This creates a rearranged structure within the image.
+        </p>
+
         <div className="grid grid-cols-2 gap-4">
           {skewed_anagrams.map((img, idx) => (
             <div
@@ -1232,6 +1501,11 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
       </section>
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Design a course logo!</h2>
+        <p>
+          To design a course logo, I used text-conditioned image-to-image
+          translation. I started with an image of Oski, and conditioned with the
+          prompt below.
+        </p>
 
         <div className="grid grid-cols-7 gap-4">
           {course_logo.slice(0, 7).map((img, idx) => (
@@ -1250,6 +1524,10 @@ High-detail 3D sci-fi drone rendered in sleek hard-surface style. Metallic cool-
             bear Oski holding a camera
           </p>
         </div>
+        <p>
+          Then, I picked the best visual effect at i_start = 10, and upscaled
+          the image to get the course logo.
+        </p>
         <div>
           {course_logo.slice(7).map((img, idx) => (
             <div
